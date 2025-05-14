@@ -25,5 +25,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-//hej jonas
