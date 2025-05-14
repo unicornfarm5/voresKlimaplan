@@ -2,19 +2,25 @@ package com.example.voresklimaplan.data
 
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.tasks.await
 
 class FirestoreRepository {
+    private val classRoomCollection = Firebase.firestore.collection("Classroom") //Her defineres collection arbejdes med
     fun updateScoreboard (classroom: Classroom) {
-        val classRoomCollection = Firebase.firestore.collection("Classroom") //Her defineres collection arbejdes med
+        classRoomCollection
+    }
 
-
+    suspend fun getClassroom():List<Classroom> {
+        return classRoomCollection
+            .get()
+            .await()
+            .toObjects(Classroom::class.java) //??
     }
 }
 
 
-/*
-//Her håndteres databasen (Slags mellemmand mellem database og app)
 
+/*
 class FamilyRepository {
     fun addFamilyMember(familieMedlem: FamilieMedlem) {
         try {
