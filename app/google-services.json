@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "811492935098",
+    "project_id": "vores-klimaplan",
+    "storage_bucket": "vores-klimaplan.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811492935098:android:830b717df621006c6ac983",
+        "android_client_info": {
+          "package_name": "com.example.voresklimaplan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBv1jG_rfQwD5z6-iCY1eMpU-VN7ybsOxk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
