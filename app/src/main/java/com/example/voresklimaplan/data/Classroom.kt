@@ -1,4 +1,6 @@
 package com.example.voresklimaplan.data
 
-class Classroom {
-}
+data class Classroom (
+    val className: String = "",
+    var score: Int = 0
+)
