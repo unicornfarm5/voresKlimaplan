@@ -28,7 +28,7 @@ fun LandingPage(
             .fillMaxSize()
     )
     {   //baggrundsbilled
-        Image(painter = painterResource(R.drawable.gamebackground),
+        Image(painter = painterResource(R.drawable.background_start_game),
             contentDescription = null,
             modifier = Modifier.fillMaxSize())
     }
