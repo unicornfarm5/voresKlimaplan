@@ -108,6 +108,6 @@ fun GameThumbnail(modifier: Modifier = Modifier) {
 @Composable
 fun PreviewBackgroundScreen() {
     val navController = rememberNavController()
-    GameLandingPage(navController = navController)
+    BackgroundScreen(navController = navController)
 }
 
