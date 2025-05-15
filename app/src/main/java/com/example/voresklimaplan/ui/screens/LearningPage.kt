@@ -1,5 +1,7 @@
 package com.example.voresklimaplan.ui.screens
 
+
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,15 +16,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.common.CustomDivider
 import com.example.voresklimaplan.common.PurpleButton // SPØRG ANE
 import com.example.voresklimaplan.common.TextFontDynaPuff
 import com.example.voresklimaplan.common.dynaPuffFont
 
+
 //Nikoleta har været her
 @Composable
-fun BackgroundScreen() {
+fun BackgroundScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -102,5 +107,7 @@ fun GameThumbnail(modifier: Modifier = Modifier) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewBackgroundScreen() {
-    BackgroundScreen()
+    val navController = rememberNavController()
+    GameLandingPage(navController = navController)
 }
+
