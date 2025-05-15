@@ -1,4 +1,4 @@
-package com.example.voresklimaplan
+package com.example.voresklimaplan.ui.theme.screens
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
