@@ -5,15 +5,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.toColorInt
+import com.example.voresklimaplan.ui.screens.rubrikBubblesFont
 
-//den her fil skal slettes :)
-//overskrifter+tekst
+//Linea
 @Composable
-fun TextOnPage(textInput: String, fontSizeInput: Int) {
+fun TextFontBubbles(textInput: String, fontSizeInput: Int) {
+    val color = Color("#1F5229".toColorInt()) //grøn farve fra figma prototypen
+
     Text(
         text = textInput,
-        color = Color.Black,
+        color = color,
         fontSize = fontSizeInput.sp,
-        fontWeight = FontWeight.Bold
+        fontFamily = rubrikBubblesFont
     )
+
 }
