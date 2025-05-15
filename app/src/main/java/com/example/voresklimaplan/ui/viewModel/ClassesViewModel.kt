@@ -8,12 +8,12 @@ import com.example.voresklimaplan.data.FirestoreRepository
 import kotlinx.coroutines.launch
 
 class ClassesViewModel: ViewModel() {
-private val firestoreRepository = FirestoreRepository()
+private val firestoreRepository = FirestoreRepository() //Her oprettes en instans af FirestoreRepository
+private val classesList = mutableStateListOf<Classroom>()
 
-    private val classesList = mutableStateListOf<Classroom>()
     fun getAllClasses() {
-        viewModelScope.launch {
-            var result = firestoreRepository.getClassroom()
+        viewModelScope.launch { //Her Startes en coroutine, så netværkskoden ikke blokere UI når der hentes data
+            val result = firestoreRepository.getClassroom()
             println(result)
         }
     }
