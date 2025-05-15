@@ -65,4 +65,8 @@ dependencies {
     implementation(libs.firebase.firestore.ktx)
     //navigation
     implementation(libs.androidx.navigation.compose)
+    //til google fonts
+    implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.4")
+
 }
