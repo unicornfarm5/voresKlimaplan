@@ -9,7 +9,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import com.example.voresklimaplan.R
-import com.example.voresklimaplan.ui.screens.rubrikBubblesFont
 
 //Linea
 public val rubrikBubblesFont = FontFamily(Font(R.font.rubikbubbles))
@@ -24,5 +23,4 @@ fun TextFontBubbles(textInput: String, fontSizeInput: Int) {
         fontSize = fontSizeInput.sp,
         fontFamily = rubrikBubblesFont
     )
-
 }
