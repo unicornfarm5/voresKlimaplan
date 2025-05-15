@@ -1,4 +1,4 @@
-package com.example.voresklimaplan.ui.theme.screens
+package com.example.voresklimaplan.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
