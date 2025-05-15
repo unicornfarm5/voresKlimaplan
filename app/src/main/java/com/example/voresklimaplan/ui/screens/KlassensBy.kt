@@ -15,8 +15,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 
 //fonts
-public val RubrikBubblesFont = FontFamily(Font(R.font.RubikBubbles))
-public val PressStartFont  = FontFamily(Font(R.font.PressStart))
+public val rubrikBubblesFont = FontFamily(Font(R.font.rubikbubbles))
+public val pressStartFont  = FontFamily(Font(R.font.pressstart))
 
 @Composable
 fun KlassensBy() {
