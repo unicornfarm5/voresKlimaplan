@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.voresklimaplan.R
+import com.example.voresklimaplan.common.TextFontGaming
 
 
 @Composable
@@ -27,7 +28,7 @@ fun ScoreboardScreen () {
             .fillMaxSize()
     )
     {
-        Image(painter = painterResource(R.drawable.gamebackground),
+        Image(painter = painterResource(R.drawable.background_start_game),
             contentDescription = null,
             modifier = Modifier.fillMaxSize()
         )
@@ -38,11 +39,6 @@ fun ScoreboardScreen () {
         }
     }
 }
-
-
-
-
-
 
 @Composable
 fun Scoreboard () {
@@ -59,22 +55,23 @@ fun Scoreboard () {
                     .fillMaxSize()
 
             )
-        Text(
-            text = "Scoreboard",
-            fontSize = 32.sp,
+        Column (
             modifier = Modifier
-                .height(140.dp)
-        )
+                .height(130.dp)
+        ) {
+            TextFontGaming("SCOREBOARD", fontSizeInput = 28)
+        }
     }
 }
 
 @Composable
 fun ScoreboardMenu () {
 
+
 }
 
 @Preview(showBackground = true)
 @Composable
-fun BackgroundScreenPreview() {
+fun ScoreboardScreenPreview() {
     ScoreboardScreen()
 }
