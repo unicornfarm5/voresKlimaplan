@@ -1,5 +1,7 @@
 package com.example.voresklimaplan.ui.screens
 
+
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.common.PurpleButton // SPØRG ANE
 import com.example.voresklimaplan.common.TextFontDynaPuff
+import com.example.voresklimaplan.common.dynaPuffFont
 
 
 //Nikoleta har været her
@@ -33,7 +36,12 @@ fun BackgroundScreen() {
         ) {
             Title()
             BarometerImage()
-            PurpleButton(buttonTekst = "Opdater") // SPØRG ANE
+            PurpleButton(
+                buttonTekst = "Opdater",
+                fontFamily = dynaPuffFont,
+                fontSize = 25
+                ) // SPØRG ANE
+
         }
     }
 }
@@ -74,4 +82,8 @@ fun BarometerImage() {
 @Composable
 fun BackgroundScreenPreview() {
     BackgroundScreen()
+}
+
+class LearningPage {
+
 }
