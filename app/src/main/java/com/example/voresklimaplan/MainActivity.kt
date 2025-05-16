@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
 import com.example.voresklimaplan.data.FirestoreRepository
+import com.example.voresklimaplan.navigation.Navhost
 import com.example.voresklimaplan.ui.theme.VoresKlimaplanTheme
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 import kotlinx.coroutines.launch
@@ -24,18 +26,13 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             VoresKlimaplanTheme {
-                Scoreboard(classesViewModel = classesViewModel)
+                val navController = rememberNavController()
+                Navhost(navController = navController)
             }
         }
     }
 }
 
-@Composable
-fun Scoreboard(classesViewModel: ClassesViewModel) {
+/*
 
-}
-
-suspend fun getClasses() {
-    val firestoreRepository = FirestoreRepository()
-    println(firestoreRepository.getClassroom())
-}
+ */
