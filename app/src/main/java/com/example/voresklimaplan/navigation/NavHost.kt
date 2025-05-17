@@ -10,7 +10,7 @@ import com.example.voresklimaplan.ui.screens.Game
 
 @Composable
 fun Navhost(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "LandingPage") {
+    NavHost(navController = navController, startDestination = "LearningPage") {
         composable("LearningPage") {
             BackgroundScreen(navController = navController)
         }
@@ -24,4 +24,3 @@ fun Navhost(navController: NavHostController) {
         }
     }
 }
-
