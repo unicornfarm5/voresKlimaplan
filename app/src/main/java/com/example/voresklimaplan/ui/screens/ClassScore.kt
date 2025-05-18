@@ -4,6 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,6 +21,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.common.TextFontGaming
+import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 
 
 @Composable
@@ -44,6 +47,7 @@ fun ScoreboardScreen (navController: NavHostController) { //Forklar
 
 @Composable
 fun Scoreboard () {
+
     Box (
         modifier = Modifier
             .fillMaxWidth()
@@ -57,12 +61,30 @@ fun Scoreboard () {
                     .fillMaxSize()
 
             )
-        Column (
+        Column ( //Husk at gøre så navne automatisk passer
             modifier = Modifier
-                .height(130.dp)
+                .offset(x = (5).dp, y = (20).dp)
+                .height(180.dp)
         ) {
-            TextFontGaming("SCOREBOARD", fontSizeInput = 28)
+            TextFontGaming("\uD83C\uDFC6 SCOREBOARD \uD83C\uDFC6", fontSizeInput = 24)
+            Column (
+                modifier = Modifier
+                    .offset(x = (20).dp, y = (20).dp)
+            )
+            {
+                TextFontGaming("1. 6.A $...", fontSizeInput = 12)
+                Spacer(modifier = Modifier.height(15.dp))
+                TextFontGaming("2. 5.B EARTHLOVER...1400", fontSizeInput = 12)
+                Spacer(modifier = Modifier.height(15.dp))
+                TextFontGaming("3. 5.A ØKOKLASSEN...1100", fontSizeInput = 12)
+                Spacer(modifier = Modifier.height(15.dp))
+                TextFontGaming("4. 6.C LIVELAUGHLOVE..950", fontSizeInput = 12)
+                Spacer(modifier = Modifier.height(15.dp))
+                TextFontGaming("5. 5.A SKIBBIDITOILET..700", fontSizeInput = 12)
+                Spacer(modifier = Modifier.height(15.dp))
+            }
         }
+
     }
 }
 
