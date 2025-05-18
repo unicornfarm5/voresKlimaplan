@@ -15,12 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.common.TextFontGaming
 
 
 @Composable
-fun ScoreboardScreen () {
+fun ScoreboardScreen (navController: NavHostController) { //Forklar
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -35,7 +37,7 @@ fun ScoreboardScreen () {
         //UI-indhold som ligger ovenpå baggrund
         Column () {
             Scoreboard()
-            ScoreboardMenu()
+            ScoreboardMenu(navController) //Forklar
         }
     }
 }
@@ -65,7 +67,7 @@ fun Scoreboard () {
 }
 
 @Composable
-fun ScoreboardMenu () {
+fun ScoreboardMenu (navController: NavHostController) { //Forklar
 Box (
     modifier = Modifier
         .fillMaxWidth()
@@ -82,6 +84,7 @@ Box (
         modifier = Modifier
             .offset(x = (130).dp, y = (40).dp)
             .clickable {
+                //navController.navigate("KlassensByScreen") Mangler
                 println ("Klassen by knap er klikket")
             }
     ) {
@@ -91,6 +94,7 @@ Box (
         modifier = Modifier
             .offset(x = (150).dp, y = (100).dp)
             .clickable {
+                navController.navigate("BackgroundScreen") //Forside
                 println ("Forside knap er klikket")
             }
 
@@ -101,6 +105,7 @@ Box (
         modifier = Modifier
             .offset(x = (140).dp, y = (160).dp)
             .clickable {
+                navController.navigate("GameLandingPage")
                 println ("Spil igen knap er klikket")
             }
     ) {
@@ -116,5 +121,6 @@ Box (
 @Preview(showBackground = true)
 @Composable
 fun ScoreboardScreenPreview() {
-    ScoreboardScreen()
+    val navController = rememberNavController()
+    ScoreboardScreen(navController = navController) //??
 }
