@@ -6,8 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 
+/*
 @Composable
-fun MainScreen(modifier: Modifier){
+fun MainScreen(modifier: Modifier)
+{
     Box(
         modifier = Modifier.fillMaxSize()
 ) {
@@ -18,4 +20,5 @@ fun MainScreen(modifier: Modifier){
         )
     }
 }
+*/
 

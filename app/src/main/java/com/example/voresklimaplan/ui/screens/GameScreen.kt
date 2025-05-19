@@ -22,8 +22,9 @@ fun GameScreen(
 ) {
     val classList = viewModel.classList //Henter listen fra ViewModel...
 
-    TextFontGaming("Davs her er et spil", 20)
-    TextFontGaming(classList[0].score.toString(), 20,  align = TextAlign.Center)
+    TextFontGaming("Davs her skal spillet være", 20)
+    //vi viser ikke en opdaterende score under spillet i mvp
+    //TextFontGaming(classList[0].score.toString(), 20,  align = TextAlign.Center)
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -35,5 +36,8 @@ fun GameScreen(
             contentScale = ContentScale.Crop
         )
 
-}
+        //hapser alt der er fra spillet?
+        //spørg benjamin om han syntes der skal være en ui-screen til game eller om alt skal være under game
+
+    }
 }
