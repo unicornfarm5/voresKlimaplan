@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -46,7 +47,8 @@ fun ScoreboardScreen (
     {
         Image(painter = painterResource(R.drawable.background_start_game),
             contentDescription = null,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
         )
 
         //UI-indhold som ligger ovenpå baggrund
@@ -76,13 +78,13 @@ fun Scoreboard (scoreboardClasses: List<String>) {
             )
         Column (                            //todo Husk at gøre så navne automatisk passer ind i scoreboard!
             modifier = Modifier
-                .offset(x = (5).dp, y = (20).dp)
+                .offset(x = (5).dp, y = (25).dp)
                 .height(200.dp)
         ) {
             TextFontGaming("\uD83C\uDFC6 SCOREBOARD \uD83C\uDFC6", fontSizeInput = 24,  align = TextAlign.Center)
             Column (
                 modifier = Modifier
-                    .offset(x = (60).dp, y = (20).dp)
+                    .offset(x = (25).dp, y = (10).dp)
             )
             {
                 scoreboardClasses.forEach { scoreboardClass ->
