@@ -1,4 +1,4 @@
-package com.example.voresklimaplan.game.domain.gameObjects
+package com.example.voresklimaplan.game.domain
 
 enum class MoveDirection {
     Left,
