@@ -14,3 +14,5 @@ Day two:
 
 Day three: 
 *
+
+En ekstra knap på gameLandingpage som fører til ClassScore, så man nemmere kan vise siden uden at skulle starte spil først.
