@@ -56,7 +56,7 @@ fun BackgroundScreen(navController: NavController) {
                 fontFamily = dynaPuffFont,
                 fontSize = 25,
                 navController = navController,
-                navigateTo = "ScoreboardScreen" //todo midlertidigt
+                navigateTo = "ScoreboardScreen" // Jonas denne linje
             )
 
             CustomDivider()
@@ -127,7 +127,7 @@ fun GameThumbnail(navController: NavController, modifier: Modifier = Modifier) {
             }
     ) {
         Image(
-            painter = painterResource(id = R.drawable.learningpagegameintro),
+            painter = painterResource(id = R.drawable.learningpagegameintro), //Chatgpt her
             contentDescription = "Game Intro Thumbnail",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
@@ -142,58 +142,34 @@ fun ClimaSteps(modifier: Modifier = Modifier) {
         StepButtonData(
             "Rejse mindre og grønnere",
             Color(0xFF9BE59B),
-            description = "   Gå eller cykl i skole – det forurener ikke og giver motion!\n" +
-                    "\n" +
-                    "    Tag bus eller tog i stedet for at køre i bil eller flyve.\n" +
-                    "\n" +
-                    "   Pas på naturen: Mindre transport betyder renere luft og glade dyr."
+            description = "   Gå eller cykl i skole – det forurener ikke og giver motion!\n\n    Tag bus eller tog i stedet for at køre i bil eller flyve.\n\n   Pas på naturen: Mindre transport betyder renere luft og glade dyr."
         ),
         StepButtonData(
             "Tænk grønt, også når du slapper af",
             Color(0xFFBBA6F2),
-            description = "Hold ferie i Danmark og udforsk naturen.\n" +
-                    "\n" +
-                    "Gør noget: Hver rejse du vælger grønt, tæller for klimaet."
+            description = "Hold ferie i Danmark og udforsk naturen.\n\nGør noget: Hver rejse du vælger grønt, tæller for klimaet."
         ),
         StepButtonData(
             "Brug mindre og grønnere",
             Color(0xFF8FD8DF),
-            description = "Brug det tøj du har – og pas godt på det.\n" +
-                    "\n" +
-                    "Byt eller køb genbrug i stedet for nyt.\n" +
-                    "\n" +
-                    "Smid mindre ud: Genbrug er guld for klimaet!"
+            description = "Brug det tøj du har – og pas godt på det.\n\nByt eller køb genbrug i stedet for nyt.\n\nSmid mindre ud: Genbrug er guld for klimaet!"
         ),
         StepButtonData(
             "Spis Klimavenlig",
             Color(0xFFF29B9B),
             textColor = Color(0xFF8A1F1F),
-            description = "\n" +
-                    "Spis mere frugt og grønt – det er bedre for klimaet end kød.\n" +
-                    "\n" +
-                    "Vælg økologisk og lokalt, hvis du kan.\n" +
-                    "\n" +
-                    "Brug dine penge klogt: Støt mad, der er god for jorden."
+            description = "\nSpis mere frugt og grønt – det er bedre for klimaet end kød.\n\nVælg økologisk og lokalt, hvis du kan.\n\nBrug dine penge klogt: Støt mad, der er god for jorden."
         ),
         StepButtonData(
             "Brug dine ting i længere tid",
             Color(0xFF9BE59B),
-            description = "\n" +
-                    "Spis mere frugt og grønt – det er bedre for klimaet end kød.\n" +
-                    "\n" +
-                    "Vælg økologisk og lokalt, hvis du kan.\n" +
-                    "\n" +
-                    "Brug dine penge klogt: Støt mad, der er god for jorden."
+            description = "\nSpis mere frugt og grønt – det er bedre for klimaet end kød.\n\nVælg økologisk og lokalt, hvis du kan.\n\nBrug dine penge klogt: Støt mad, der er god for jorden."
         ),
         StepButtonData(
             "Gør dit hjem grønnere",
             Color(0xFFFFC44D),
             textColor = Color(0xFFB36A00),
-            description = "Sluk for lys og skærme, når du ikke bruger dem.\n" +
-                    "\n" +
-                    "Brug mindre strøm – det hjælper både klimaet og elregningen.\n" +
-                    "\n" +
-                    "Hjælp din familie: Vis dem hvordan I kan spare energi sammen."
+            description = "Sluk for lys og skærme, når du ikke bruger dem.\n\nBrug mindre strøm – det hjælper både klimaet og elregningen.\n\nHjælp din familie: Vis dem hvordan I kan spare energi sammen."
         )
     )
 
@@ -211,12 +187,7 @@ fun ClimaSteps(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(8.dp))
 
         buttons.forEach { button ->
-            StyledStepButton(
-                text = button.title,
-                borderColor = button.borderColor,
-                textColor = button.textColor,
-                description = button.description
-            )
+            StyledStepButton(stepData = button)
             Spacer(modifier = Modifier.height(12.dp))
         }
     }
@@ -226,36 +197,33 @@ fun ClimaSteps(modifier: Modifier = Modifier) {
 //Nikoleta har været her
 @Composable
 fun StyledStepButton(
-    text: String,
-    borderColor: Color,
-    textColor: Color = Color.Black,
-    description: String = ""
+stepData: StepButtonData
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) } //Chatgpt her
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .border(2.dp, borderColor, RoundedCornerShape(12.dp))
+            .border(2.dp, stepData.borderColor, RoundedCornerShape(12.dp))
             .padding(12.dp)
-            .clickable { expanded = !expanded }
+            .clickable { expanded = !expanded } //Chatgpt her
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
             TextFontDynaPuff(
-                textInput = text,
+                textInput = stepData.title,
                 fontSizeInput = 18,
-                color = textColor,
+                color = stepData.textColor,
                 modifier = Modifier.weight(1f)
             )
             TextFontDynaPuff(
                 textInput = if (expanded) "▲" else "▼",
                 fontSizeInput = 18,
-                color = textColor,
+                color = stepData.textColor,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -263,9 +231,9 @@ fun StyledStepButton(
         if (expanded) {
             Spacer(modifier = Modifier.height(8.dp))
             TextFontDynaPuff(
-                textInput = description,
+                textInput = stepData.description,
                 fontSizeInput = 14,
-                color = textColor
+                color = stepData.textColor
             )
         }
     }
@@ -275,7 +243,7 @@ fun StyledStepButton(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PreviewBackgroundScreen() {
+fun PreviewBackgroundScreen() { //Føen her.
     val navController = rememberNavController()
     BackgroundScreen(navController = navController)
 }
