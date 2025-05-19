@@ -13,6 +13,5 @@ Day two:
 * Undersøgelse af spil
 
 Day three: 
-*
-
-En ekstra knap på gameLandingpage som fører til ClassScore, så man nemmere kan vise siden uden at skulle starte spil først.
+* En ekstra knap på gameLandingpage som fører til ClassScore, så man nemmere kan vise siden uden at skulle starte spil først.
+* Ny under-mapppe med filstruktur til spillet.
