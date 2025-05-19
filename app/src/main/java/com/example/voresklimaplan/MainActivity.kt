@@ -19,20 +19,27 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        lifecycleScope.launch {
+        lifecycleScope.launch { //??
             classesViewModel.getAllClasses()
         }
 
         setContent {
             VoresKlimaplanTheme {
-                val navController = rememberNavController()
-                Navhost(navController = navController)
+                val navController = rememberNavController() //??
+                Navhost(navController = navController, classesViewModel = classesViewModel) //??
             }
         }
     }
 }
 
 /*
-KODE SLETTET
+@Composable
+fun Scoreboard(classesViewModel: ClassesViewModel) {
+    classesViewModel.getAllClasses()
+}
+
+suspend fun getClasses() {
+    val getClassroom = FirestoreRepository()
+    println(getClassroom.getClassroom())
+}
  */

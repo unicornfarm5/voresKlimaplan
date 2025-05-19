@@ -54,7 +54,9 @@ fun BackgroundScreen(navController: NavController) {
             PurpleButton(
                 buttonTekst = "Opdater",
                 fontFamily = dynaPuffFont,
-                fontSize = 25
+                fontSize = 25,
+                navController = navController,
+                navigateTo = "ScoreboardScreen" //todo midlertidigt
             )
 
             CustomDivider()

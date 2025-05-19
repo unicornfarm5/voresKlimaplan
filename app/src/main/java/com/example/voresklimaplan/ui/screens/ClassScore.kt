@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,7 +26,13 @@ import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 
 
 @Composable
-fun ScoreboardScreen (navController: NavHostController) { //Forklar
+fun ScoreboardScreen (navController: NavHostController, viewModel: ClassesViewModel) { //Forklar
+    val classList = viewModel.classList //Henter listen fra ViewModel...
+
+    LaunchedEffect(Unit) { //??
+        viewModel.getAllClasses()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -39,15 +46,17 @@ fun ScoreboardScreen (navController: NavHostController) { //Forklar
 
         //UI-indhold som ligger ovenpå baggrund
         Column () {
-            Scoreboard()
+            //todo Hvad sker der her??
+            val scoreboardClasses = classList.map { it.className }
+            Scoreboard(scoreboardClasses = scoreboardClasses)
+
             ScoreboardMenu(navController) //Forklar
         }
     }
 }
 
 @Composable
-fun Scoreboard () {
-
+fun Scoreboard (scoreboardClasses: List<String>) {
     Box (
         modifier = Modifier
             .fillMaxWidth()
@@ -61,10 +70,10 @@ fun Scoreboard () {
                     .fillMaxSize()
 
             )
-        Column ( //Husk at gøre så navne automatisk passer
+        Column (                            //todo Husk at gøre så navne automatisk passer ind i scoreboard!
             modifier = Modifier
                 .offset(x = (5).dp, y = (20).dp)
-                .height(180.dp)
+                .height(200.dp)
         ) {
             TextFontGaming("\uD83C\uDFC6 SCOREBOARD \uD83C\uDFC6", fontSizeInput = 24)
             Column (
@@ -72,16 +81,10 @@ fun Scoreboard () {
                     .offset(x = (20).dp, y = (20).dp)
             )
             {
-                TextFontGaming("1. 6.A $...", fontSizeInput = 12)
-                Spacer(modifier = Modifier.height(15.dp))
-                TextFontGaming("2. 5.B EARTHLOVER...1400", fontSizeInput = 12)
-                Spacer(modifier = Modifier.height(15.dp))
-                TextFontGaming("3. 5.A ØKOKLASSEN...1100", fontSizeInput = 12)
-                Spacer(modifier = Modifier.height(15.dp))
-                TextFontGaming("4. 6.C LIVELAUGHLOVE..950", fontSizeInput = 12)
-                Spacer(modifier = Modifier.height(15.dp))
-                TextFontGaming("5. 5.A SKIBBIDITOILET..700", fontSizeInput = 12)
-                Spacer(modifier = Modifier.height(15.dp))
+                scoreboardClasses.forEach { scoreboardClass ->
+                    TextFontGaming(scoreboardClass, fontSizeInput = 11)
+                    Spacer(modifier = Modifier.height(15.dp))
+                }
             }
         }
 
@@ -133,16 +136,15 @@ Box (
     ) {
         TextFontGaming("SPIL IGEN", fontSizeInput = 14)
     }
-
-
 }
 }
 
-
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun ScoreboardScreenPreview() {
     val navController = rememberNavController()
+
     ScoreboardScreen(navController = navController) //??
 }
+ */

@@ -9,35 +9,22 @@ import kotlinx.coroutines.launch
 
 class ClassesViewModel: ViewModel() {
 private val firestoreRepository = FirestoreRepository() //Her oprettes en instans af FirestoreRepository
-private val classesList = mutableStateListOf<Classroom>()
+
+private val _classList = mutableStateListOf<Classroom>() //??
+    val classList: List<Classroom> get() = _classList //??
 
     fun getAllClasses() {
-        viewModelScope.launch { //Her Startes en coroutine, så netværkskoden ikke blokere UI når der hentes data
-            val result = firestoreRepository.getClassroom()
-            println(result)
-        }
-    }
+            viewModelScope.launch { //Her Startes en coroutine, så netværkskoden ikke blokere UI når der hentes data
+                try {
+                    val result = firestoreRepository.getClassroomList() //Her gemmes resultat fra firestore
+                    _classList.clear() //??
+                    _classList.addAll(result)
 
+                    println(result)
 
-
-}
-//what up
-
-/*
-class FamilyViewModel: ViewModel() {
-    private val familyRepository = FamilyRepository() //Private fordi det kun skal brugs i viewModel
-
-    var familieNavn by mutableStateOf("")
-    var email by mutableStateOf("")
-
-
-    fun upload () { //Opretter et FamilieMedlem-objekt og beder famlilyRepository om at upload det til databasen
-        familyRepository.addFamilyMember(
-            FamilieMedlem(
-                familieNavn = familieNavn,
-                medlemmer = listOf(email),
-            )
-        )
+                } catch (e: Exception) {
+                    println("Fejl: ${e.message}")
+                }
+            }
     }
 }
- */
