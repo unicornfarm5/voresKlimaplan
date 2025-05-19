@@ -23,7 +23,9 @@ fun Navhost(navController: NavHostController, classesViewModel: ClassesViewModel
         }
 
         composable("GameScreen") {
-            GameScreen(navController = navController) // hvis du har en sådan funktion
+            GameScreen(navController = navController,
+                       viewModel = classesViewModel
+            ) // hvis du har en sådan funktion
         }
 
         composable("ScoreboardScreen") { //???
