@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.common.PurpleButton
+import com.example.voresklimaplan.common.TextFontBubbles
 
 @Composable
 //start game screen
@@ -51,13 +52,10 @@ fun GameLandingPage(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "SAVE\nTHE EARTH",
-                fontSize = 70.sp,
-                fontWeight = FontWeight.Normal,
-                textAlign = TextAlign.Center,
-                color = Color(0xFF1F5229),
-                fontFamily = RubikBubbles
+
+            TextFontBubbles(
+                textInput = "SAVE\nTHE EARTH",
+                fontSizeInput = 70
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -78,7 +76,15 @@ fun GameLandingPage(navController: NavController) {
                 fontFamily = PressStartFont,
                 fontSize = 18,
                 navController = navController,
-                navigateTo = "ScoreboardScreen" //todo midlertidigt
+                navigateTo = "GameScreen"
+            )
+//Linea
+            PurpleButton(
+                buttonTekst = "SCOREBOARD \uD83D\uDCCB",
+                fontFamily = PressStartFont,
+                fontSize = 18,
+                navController = navController,
+                navigateTo = "ScoreboardScreen"
             )
 
         }

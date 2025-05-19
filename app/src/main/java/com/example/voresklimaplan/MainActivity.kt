@@ -19,9 +19,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        lifecycleScope.launch { //??
-            classesViewModel.getAllClasses()
-        }
+
+        classesViewModel.getAllClasses()
+        //ved afsluttet spil skal firestores socre opdateres + den funk skal køre igen så scoreboard+by er up to date
+
 
         setContent {
             VoresKlimaplanTheme {

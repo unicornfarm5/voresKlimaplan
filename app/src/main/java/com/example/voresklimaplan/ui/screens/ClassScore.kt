@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -26,7 +27,11 @@ import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 
 
 @Composable
-fun ScoreboardScreen (navController: NavHostController, viewModel: ClassesViewModel) { //Forklar
+fun ScoreboardScreen (
+    navController: NavHostController,
+    viewModel: ClassesViewModel
+) {
+    //Forklar
     val classList = viewModel.classList //Henter listen fra ViewModel...
 
     LaunchedEffect(Unit) { //??
@@ -75,10 +80,10 @@ fun Scoreboard (scoreboardClasses: List<String>) {
                 .offset(x = (5).dp, y = (20).dp)
                 .height(200.dp)
         ) {
-            TextFontGaming("\uD83C\uDFC6 SCOREBOARD \uD83C\uDFC6", fontSizeInput = 24)
+            TextFontGaming("\uD83C\uDFC6 SCOREBOARD \uD83C\uDFC6", fontSizeInput = 24,  align = TextAlign.Center)
             Column (
                 modifier = Modifier
-                    .offset(x = (20).dp, y = (20).dp)
+                    .offset(x = (60).dp, y = (20).dp)
             )
             {
                 scoreboardClasses.forEach { scoreboardClass ->
@@ -87,7 +92,6 @@ fun Scoreboard (scoreboardClasses: List<String>) {
                 }
             }
         }
-
     }
 }
 
@@ -109,7 +113,7 @@ Box (
         modifier = Modifier
             .offset(x = (130).dp, y = (40).dp)
             .clickable {
-                //navController.navigate("KlassensByScreen") Mangler
+                navController.navigate("ClassTown")
                 println ("Klassen by knap er klikket")
             }
     ) {
@@ -136,6 +140,8 @@ Box (
     ) {
         TextFontGaming("SPIL IGEN", fontSizeInput = 14)
     }
+
+
 }
 }
 
@@ -147,4 +153,5 @@ fun ScoreboardScreenPreview() {
 
     ScoreboardScreen(navController = navController) //??
 }
+
  */

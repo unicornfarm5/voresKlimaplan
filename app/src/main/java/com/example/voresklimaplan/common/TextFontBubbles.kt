@@ -1,11 +1,14 @@
 package com.example.voresklimaplan.common
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import com.example.voresklimaplan.R
@@ -21,6 +24,9 @@ fun TextFontBubbles(textInput: String, fontSizeInput: Int) {
         text = textInput,
         color = color,
         fontSize = fontSizeInput.sp,
-        fontFamily = rubrikBubblesFont
+        fontFamily = rubrikBubblesFont,
+        lineHeight = (fontSizeInput + 10).sp,
+        modifier = Modifier.fillMaxWidth(), //for at kunne bruge align-center
+        textAlign = TextAlign.Center
     )
 }

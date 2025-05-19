@@ -26,12 +26,13 @@ fun PurpleButton(
     val color = Color("#D2BFFF".toColorInt()) //lilla farve fra figma prototypen
 
     Button(
-        onClick = {navController.navigate(navigateTo) //??
+        onClick = {
+            navController.navigate(navigateTo) //??
         },
-            colors = ButtonDefaults.buttonColors(containerColor = color),
-            border = BorderStroke(2.dp, Color.Black),
-            modifier = Modifier
-                .padding(20.dp)
+        colors = ButtonDefaults.buttonColors(containerColor = color),
+        border = BorderStroke(2.dp, Color.Black),
+        modifier = Modifier
+            .padding(20.dp)
     ) {
         Text(
             text = buttonTekst,

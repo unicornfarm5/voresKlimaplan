@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.voresklimaplan.ui.screens.BackgroundScreen
+import com.example.voresklimaplan.ui.screens.ClassTown
 import com.example.voresklimaplan.ui.screens.GameLandingPage
 import com.example.voresklimaplan.ui.screens.Game
 import com.example.voresklimaplan.ui.screens.ScoreboardScreen
@@ -27,6 +28,13 @@ fun Navhost(navController: NavHostController, classesViewModel: ClassesViewModel
 
         composable("ScoreboardScreen") { //???
             ScoreboardScreen(
+                navController = navController,
+                viewModel = classesViewModel
+            )
+        }
+
+        composable("ClassTown") { //???
+            ClassTown(
                 navController = navController,
                 viewModel = classesViewModel
             )
