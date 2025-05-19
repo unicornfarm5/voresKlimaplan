@@ -51,11 +51,10 @@ fun ScoreboardScreen (
 
         //UI-indhold som ligger ovenpå baggrund
         Column () {
-            //todo Hvad sker der her??
-            val scoreboardClasses = classList.map { it.className }
+            val scoreboardClasses = classList.map { it.className } //Her oprettes en ny liste ud fra classList bare kun med className
             Scoreboard(scoreboardClasses = scoreboardClasses)
 
-            ScoreboardMenu(navController) //Forklar
+            ScoreboardMenu(navController)
         }
     }
 }
@@ -92,11 +91,12 @@ fun Scoreboard (scoreboardClasses: List<String>) {
                 }
             }
         }
+
     }
 }
 
 @Composable
-fun ScoreboardMenu (navController: NavHostController) { //Forklar
+fun ScoreboardMenu (navController: NavHostController) {
 Box (
     modifier = Modifier
         .fillMaxWidth()
@@ -123,7 +123,7 @@ Box (
         modifier = Modifier
             .offset(x = (150).dp, y = (100).dp)
             .clickable {
-                navController.navigate("BackgroundScreen") //Forside
+                navController.navigate("LearningPage") //Forside
                 println ("Forside knap er klikket")
             }
 
@@ -140,8 +140,6 @@ Box (
     ) {
         TextFontGaming("SPIL IGEN", fontSizeInput = 14)
     }
-
-
 }
 }
 
@@ -153,5 +151,4 @@ fun ScoreboardScreenPreview() {
 
     ScoreboardScreen(navController = navController) //??
 }
-
  */

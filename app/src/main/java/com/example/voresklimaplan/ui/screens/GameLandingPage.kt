@@ -61,7 +61,7 @@ fun GameLandingPage(navController: NavController) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "RAM ALLE DE TING SOM\n \n ER GODT FOR KLODEN",
+                text = "RAM ALLE DE TING SOM\n ER GODT FOR KLODEN",
                 fontSize = 11.sp,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
