@@ -27,7 +27,7 @@ import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 
 @Composable
 fun ScoreboardScreen (navController: NavHostController, viewModel: ClassesViewModel) { //Forklar
-    val classList = viewModel.classList //Henter listen fra ViewModel...
+    val classList = viewModel.classList //Henter listen fra Firestore via ViewModel
 
     LaunchedEffect(Unit) { //??
         viewModel.getAllClasses()
@@ -46,11 +46,10 @@ fun ScoreboardScreen (navController: NavHostController, viewModel: ClassesViewMo
 
         //UI-indhold som ligger ovenpå baggrund
         Column () {
-            //todo Hvad sker der her??
-            val scoreboardClasses = classList.map { it.className }
+            val scoreboardClasses = classList.map { it.className } //Her oprettes en ny liste ud fra classList bare kun med className
             Scoreboard(scoreboardClasses = scoreboardClasses)
 
-            ScoreboardMenu(navController) //Forklar
+            ScoreboardMenu(navController)
         }
     }
 }
@@ -92,7 +91,7 @@ fun Scoreboard (scoreboardClasses: List<String>) {
 }
 
 @Composable
-fun ScoreboardMenu (navController: NavHostController) { //Forklar
+fun ScoreboardMenu (navController: NavHostController) {
 Box (
     modifier = Modifier
         .fillMaxWidth()
@@ -109,7 +108,7 @@ Box (
         modifier = Modifier
             .offset(x = (130).dp, y = (40).dp)
             .clickable {
-                //navController.navigate("KlassensByScreen") Mangler
+                //todo navController.navigate("KlassensByScreen") Mangler
                 println ("Klassen by knap er klikket")
             }
     ) {
