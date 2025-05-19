@@ -28,12 +28,9 @@ import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 
 
 @Composable
-fun ScoreboardScreen (
-    navController: NavHostController,
-    viewModel: ClassesViewModel
+fun ScoreboardScreen (navController: NavHostController, viewModel: ClassesViewModel
 ) {
-    //Forklar
-    val classList = viewModel.classList //Henter listen fra ViewModel...
+    val classList = viewModel.classList //Henter listen fra ViewModel
 
     LaunchedEffect(Unit) { //??
         viewModel.getAllClasses()
