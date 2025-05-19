@@ -118,7 +118,7 @@ Box (
         modifier = Modifier
             .offset(x = (150).dp, y = (100).dp)
             .clickable {
-                navController.navigate("BackgroundScreen") //Forside
+                navController.navigate("LearningPage") //Forside
                 println ("Forside knap er klikket")
             }
 
