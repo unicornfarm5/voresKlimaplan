@@ -4,6 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
@@ -33,6 +37,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-/*
-KODE SLETTET
- */
+@Composable
+fun Scoreboard(classesViewModel: ClassesViewModel) {
+    classesViewModel.getAllClasses()
+}
+
+
+suspend fun getClasses() {
+    val getClassroom = FirestoreRepository()
+    println(getClassroom.getClassroom())
+}
