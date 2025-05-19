@@ -32,8 +32,8 @@ fun ScoreboardScreen (navController: NavHostController, viewModel: ClassesViewMo
 ) {
     val classList = viewModel.classList //Henter listen fra ViewModel
 
-    LaunchedEffect(Unit) { //??
-        viewModel.getAllClasses()
+    LaunchedEffect(Unit) { //Kører kun koden en gang ved visning af Composable og ikke ved state ændringer
+        viewModel.getAllClasses() //Henter alle klasserne fra firestore
     }
 
     Box(
