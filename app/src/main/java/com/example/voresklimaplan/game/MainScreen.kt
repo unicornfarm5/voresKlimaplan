@@ -40,11 +40,11 @@ fun MainScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .pointerInput(Unit){
+            .pointerInput(Unit){ // lytter efter fingerbevægele
                 awaitPointerEventScope {
-                    detectMoveGesture(
+                    detectMoveGesture( //kalder detectMoveGesture
                         gameStatus = game.status,
-                        onLeft = {},
+                        onLeft = {}, //  Er tomme gør ingenting endnu
                         onRight = {},
                         onFingerLifted = {}
                     )
