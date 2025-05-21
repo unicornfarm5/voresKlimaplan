@@ -28,14 +28,12 @@ import kotlin.ranges.random
 
 class GameViewModel: ViewModel() {
     val game: Game by mutableStateOf(Game())
-
     var moveDirection: MoveDirection by mutableStateOf(MoveDirection.None)
     var screenWidth: Int by mutableIntStateOf(800)
     var screenHeight:  Int by mutableIntStateOf(1600)
     val earthOffsetX: Animatable<Float, AnimationVector1D> by mutableStateOf(Animatable(0f))
 
     val activeGameTargets = mutableStateListOf<FallingGameTarget>() //den bruger de aktive
-
     // Game targets
     val gameTargets = listOf(
         GameTarget("Cykel", true, 2131165295),
@@ -54,22 +52,6 @@ class GameViewModel: ViewModel() {
             xCordinate = (0..screenWidth).random(),
             yCordinate= 0
         )
-    }
-
-    fun spawningTarget( //den her bruger vi ikke lige nu
-        context: Context, // giver adgang til at oprette viewet
-        parent: ViewGroup //er en container der kan indeholde views - her imageView
-    ) {
-        val gameTarget = createRandomTarget() // får et nyt gameTarget hver gang den kører
-        val imageView = ImageView(context).apply {
-            setImageResource(gameTarget.imageId)
-            layoutParams = FrameLayout.LayoutParams(200, 200).apply {
-                topMargin = 0 // Spawner øverst på skærmen
-                leftMargin = (0..screenWidth).random() // Tilfældigt horisontalt
-                id = gameTarget.imageId
-            }
-        }
-        parent.addView(imageView)
     }
 
     //skal kaldes ved game start og skal derfor launches inde i gameScreen/mainScreen så spillet starter

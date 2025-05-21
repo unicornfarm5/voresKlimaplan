@@ -46,8 +46,6 @@ fun MainScreen(
     navController: NavController,
     viewModel: ClassesViewModel
 ) {
-
-
     val context = LocalContext.current  // Her henter vi Context
     val gameViewModel: GameViewModel = viewModel() //instans af gameViewModel
     val classList = viewModel.classList
