@@ -9,7 +9,7 @@ suspend fun AwaitPointerEventScope.detectMoveGesture(
     onLeft:() -> Unit,
     onRight:()-> Unit,
     onFingerLifted:() -> Unit,
-    ){
+){
     while (gameStatus == GameStatus.Started){
         val downEvent = awaitPointerEvent()
         val initialDown = downEvent.changes.firstOrNull { it.pressed}
@@ -42,6 +42,4 @@ suspend fun AwaitPointerEventScope.detectMoveGesture(
             change.consume()
         }
     }
-
-
 }
