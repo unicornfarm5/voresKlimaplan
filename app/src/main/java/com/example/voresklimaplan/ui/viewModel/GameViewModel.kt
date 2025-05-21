@@ -26,6 +26,7 @@ import kotlin.Int
 import kotlin.random.Random
 import kotlin.ranges.random
 
+//Linea
 class GameViewModel: ViewModel() {
     val game: Game by mutableStateOf(Game())
     var moveDirection: MoveDirection by mutableStateOf(MoveDirection.None)

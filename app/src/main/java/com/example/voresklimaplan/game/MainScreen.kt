@@ -41,6 +41,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+//Jonas
 @Composable
 fun MainScreen(
     navController: NavController,
@@ -57,12 +58,15 @@ fun MainScreen(
 
     val scope = rememberCoroutineScope()
 
+    //Linea
+    //starter spillet automatisk når game-siden åbnes
     LaunchedEffect(Unit) {
         // Vent evt. lidt, så layout er klar
         delay(500)
         gameViewModel.startGame()
     }
 
+    //Jonas
     Column {
         //TextFontGaming("Davs her er et spil", 20)
         //TextFontGaming(classList[0].score.toString(), 20, align = TextAlign.Center)
@@ -124,6 +128,9 @@ fun MainScreen(
                     )
                 )
             }
+
+            //Linea
+            //Falling GameTargets
             gameViewModel.activeGameTargets.forEach { fallingGameTarget ->
                 Image(
                     painter = painterResource(id = fallingGameTarget.imageId),
