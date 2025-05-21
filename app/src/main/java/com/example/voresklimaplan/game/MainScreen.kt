@@ -23,6 +23,8 @@ import com.example.voresklimaplan.game.util.detectMoveGesture
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 
 
+//fra https://www.youtube.com/watch?v=LXZw2RyV06s&t=849s
+
 //Føen
 @Composable
 fun MainScreen(
@@ -51,7 +53,7 @@ fun MainScreen(
                 }
             }
     ) {
-        Image(
+        Image( //background img
             painter = painterResource(R.drawable.background_game),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
