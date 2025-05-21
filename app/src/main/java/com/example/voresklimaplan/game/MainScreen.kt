@@ -125,6 +125,8 @@ fun MainScreen(
 
 
 /*
+//fra https://www.youtube.com/watch?v=LXZw2RyV06s&t=849s
+
 //Føen
 @Composable
 fun MainScreen(
@@ -162,18 +164,18 @@ fun MainScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .pointerInput(Unit){
+            .pointerInput(Unit){ // lytter efter fingerbevægele
                 awaitPointerEventScope {
-                    detectMoveGesture(
+                    detectMoveGesture( //kalder detectMoveGesture
                         gameStatus = game.status,
-                        onLeft = {},
+                        onLeft = {}, //  Er tomme gør ingenting endnu
                         onRight = {},
                         onFingerLifted = {}
                     )
                 }
             }
     ) {
-        Image(
+        Image( //background img
             painter = painterResource(R.drawable.background_game),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
