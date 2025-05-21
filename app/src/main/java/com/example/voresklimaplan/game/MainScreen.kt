@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.common.TextFontGaming
@@ -31,6 +32,7 @@ import com.example.voresklimaplan.game.domain.Game
 import com.example.voresklimaplan.game.domain.MoveDirection
 import com.example.voresklimaplan.game.util.detectMoveGesture
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
+import com.example.voresklimaplan.ui.viewModel.GameViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -39,21 +41,14 @@ fun MainScreen(
     viewModel: ClassesViewModel
 ) {
     val context = LocalContext.current  // Her henter vi Context
+    val gameViewModel: GameViewModel = viewModel() //instans af gameViewModel
+
     val classList = viewModel.classList
-    val game = remember { Game() }
-    var moveDirection by remember { mutableStateOf(MoveDirection.None) }
 
     // Hent billedet som ImageBitmap til Canvas
-    val earthImageBitmap = ImageBitmap.imageResource(context.resources, R.drawable.game_earth)
+    val earthImageBitmap = ImageBitmap.imageResource(R.drawable.game_earth)
     val earthWidth = earthImageBitmap.width
     val earthHeight = earthImageBitmap.height
-
-    var screenWidth by remember { mutableStateOf(0) }
-    var screenHeight by remember { mutableStateOf(0) }
-
-    val earthOffsetX = remember {
-        androidx.compose.animation.core.Animatable(0f)
-    }
 
     val scope = rememberCoroutineScope()
 
@@ -65,36 +60,36 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .onGloballyPositioned {
-                    screenWidth = it.size.width
-                    screenHeight = it.size.height
+                    gameViewModel.screenWidth = it.size.width
+                    gameViewModel.screenHeight = it.size.height
 
                     // Startposition: midt i bunden
-                    if (earthOffsetX.value == 0f) {
+                    if (gameViewModel.earthOffsetX.value == 0f) {
                         scope.launch {
-                            earthOffsetX.snapTo(screenWidth / 2f - earthWidth / 2f)
+                            gameViewModel.earthOffsetX.snapTo(gameViewModel.screenWidth / 2f - earthWidth / 2f)
                         }
                     }
                 }
                 .pointerInput(Unit) {
                     awaitPointerEventScope {
                         detectMoveGesture(
-                            gameStatus = game.status,
+                            gameStatus = gameViewModel.game.status,
                             onLeft = {
                                 scope.launch {
-                                    val newX = (earthOffsetX.value - 15f)
+                                    val newX = (gameViewModel.earthOffsetX.value - 15f)
                                         .coerceAtLeast(0f)
-                                    earthOffsetX.snapTo(newX)
+                                    gameViewModel.earthOffsetX.snapTo(newX)
                                 }
                             },
                             onRight = {
                                 scope.launch {
-                                    val newX = (earthOffsetX.value + 15f)
-                                        .coerceAtMost(screenWidth - earthWidth.toFloat())
-                                    earthOffsetX.snapTo(newX)
+                                    val newX = (gameViewModel.earthOffsetX.value + 15f)
+                                        .coerceAtMost(gameViewModel.screenWidth - earthWidth.toFloat())
+                                    gameViewModel.earthOffsetX.snapTo(newX)
                                 }
                             },
                             onFingerLifted = {
-                                moveDirection = MoveDirection.None
+                                gameViewModel.moveDirection = MoveDirection.None
                             }
                         )
                     }
@@ -113,7 +108,7 @@ fun MainScreen(
                 drawImage(
                     image = earthImageBitmap,
                     topLeft = Offset(
-                        x = earthOffsetX.value,
+                        x = gameViewModel.earthOffsetX.value,
                         y = size.height - earthHeight // placer i bunden
                     )
                 )
