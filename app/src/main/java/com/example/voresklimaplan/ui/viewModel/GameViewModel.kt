@@ -11,18 +11,19 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.voresklimaplan.game.domain.Game
+import com.example.voresklimaplan.game.domain.GameStatus
 import com.example.voresklimaplan.game.domain.MoveDirection
 import com.example.voresklimaplan.game.domain.gameTargets.GameTarget
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class GameViewModel: ViewModel() {
     val game: Game by mutableStateOf(Game())
     var moveDirection: MoveDirection by mutableStateOf(MoveDirection.None)
-
-
     var screenWidth: Int by mutableIntStateOf(800)
     var screenHeight:  Int by mutableIntStateOf(1600)
-
     val earthOffsetX: Animatable<Float, AnimationVector1D> by mutableStateOf(Animatable(0f))
 
     // Game targets
@@ -34,8 +35,6 @@ class GameViewModel: ViewModel() {
     fun getRandomTarget(): GameTarget {
         return gameTargets[(1..gameTargets.size).random()]
     }
-
-    //spørg Ane om den her fun burde være en method i GameTarget?
     fun spawningTarget(
         context: Context, // giver adgang til at oprette viewet
         parent: ViewGroup //er en container der kan indeholde views - her imageView
@@ -51,4 +50,24 @@ class GameViewModel: ViewModel() {
         }
         parent.addView(imageView)
     }
+
+    //skal kaldes ved game start og skal derfor launches inde i gameScreen/mainScreen så spillet starter
+    fun startGame(
+        context: Context, // giver adgang til at oprette viewet
+        parent: ViewGroup //er en container der kan indeholde views - her imageView
+    ) {
+        //først opdateres gameStatus
+        //game.status = GameStatus.Started
+        //så kører spawning nemlig
+        viewModelScope.launch {
+            while (game.status == GameStatus.Started) {
+                spawningTarget(context, parent)
+                delay(4000L)
+            }
+        }
+    }
+    fun stopGame() {
+        //game.status = GameStatus.Over
+    }
+
 }

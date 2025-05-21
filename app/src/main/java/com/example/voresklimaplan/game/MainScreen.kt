@@ -42,7 +42,6 @@ fun MainScreen(
 ) {
     val context = LocalContext.current  // Her henter vi Context
     val gameViewModel: GameViewModel = viewModel() //instans af gameViewModel
-
     val classList = viewModel.classList
 
     // Hent billedet som ImageBitmap til Canvas
@@ -53,8 +52,8 @@ fun MainScreen(
     val scope = rememberCoroutineScope()
 
     Column {
-        TextFontGaming("Davs her er et spil", 20)
-        TextFontGaming(classList[0].score.toString(), 20, align = TextAlign.Center)
+        //TextFontGaming("Davs her er et spil", 20)
+        //TextFontGaming(classList[0].score.toString(), 20, align = TextAlign.Center)
 
         Box(
             modifier = Modifier
