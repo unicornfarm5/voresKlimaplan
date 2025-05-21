@@ -1,7 +1,7 @@
 package com.example.voresklimaplan.game.domain
 
 data class Game(
-    val status: GameStatus = GameStatus.Idle,
+    var status: GameStatus = GameStatus.Idle,
     val score: Int = 0,
     val settings: GameSettings = GameSettings()
 )

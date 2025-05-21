@@ -7,7 +7,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.voresklimaplan.R
@@ -33,7 +37,9 @@ import com.example.voresklimaplan.game.domain.MoveDirection
 import com.example.voresklimaplan.game.util.detectMoveGesture
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 import com.example.voresklimaplan.ui.viewModel.GameViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 @Composable
 fun MainScreen(
@@ -52,6 +58,12 @@ fun MainScreen(
     val earthHeight = earthImageBitmap.height
 
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        // Vent evt. lidt, så layout er klar
+        delay(500)
+        gameViewModel.startGame()
+    }
 
     Column {
         //TextFontGaming("Davs her er et spil", 20)
@@ -112,6 +124,18 @@ fun MainScreen(
                         x = gameViewModel.earthOffsetX.value,
                         y = size.height - earthHeight // placer i bunden
                     )
+                )
+            }
+            gameViewModel.activeGameTargets.forEach { fallingGameTarget ->
+                Image(
+                    painter = painterResource(id = fallingGameTarget.imageId),
+                    contentDescription = fallingGameTarget.targetName,
+                    modifier = Modifier
+                        .size(80.dp)
+                        .offset(
+                            x = fallingGameTarget.xCordinate.dp,
+                            y = fallingGameTarget.yCordinate.dp,
+                        )
                 )
             }
         }
