@@ -129,7 +129,7 @@ fun MainScreen(
                     painter = painterResource(id = fallingGameTarget.imageId),
                     contentDescription = fallingGameTarget.targetName,
                     modifier = Modifier
-                        .size(80.dp)
+                        .size(150.dp)
                         .offset(
                             x = fallingGameTarget.xCordinate.dp,
                             y = fallingGameTarget.yCordinate.dp,
