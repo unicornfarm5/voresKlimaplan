@@ -60,6 +60,20 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //Game -dependencies fra https://github.com/stevdza-san/NinjaBubble_Game/blob/main/gradle/libs.versions.toml
+    //men chatGPT har lavet dem om til build.gradle, før var i i libs.version.toml
+        // Sprite KMP
+        implementation("com.stevdza-san:sprite:1.0.0") // <-- Tjek den rigtige version
+
+        // ExoPlayer
+        implementation("androidx.media3:media3-exoplayer:1.3.0") // <-- Eksempel på version
+
+        // Koin
+        implementation("io.insert-koin:koin-android:3.5.0")
+        implementation("io.insert-koin:koin-core:3.5.0")
+        implementation("io.insert-koin:koin-compose:1.1.0")
+
+
 
     //Firebase
     implementation(platform(libs.firebase.bom))

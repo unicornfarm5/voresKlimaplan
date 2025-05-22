@@ -26,7 +26,7 @@ import com.example.voresklimaplan.common.CustomDivider
 import com.example.voresklimaplan.common.PurpleButton
 import com.example.voresklimaplan.common.TextFontDynaPuff
 import com.example.voresklimaplan.common.dynaPuffFont
-import com.example.voresklimaplan.data.StepButtonData
+import com.example.voresklimaplan.common.StepButtonData
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 

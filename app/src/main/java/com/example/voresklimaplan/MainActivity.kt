@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.voresklimaplan.data.FirestoreRepository
 import com.example.voresklimaplan.navigation.Navhost
@@ -14,18 +15,13 @@ import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    private val classesViewModel = ClassesViewModel()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        classesViewModel.getAllClasses()
-        //ved afsluttet spil skal firestores socre opdateres + den funk skal køre igen så scoreboard+by er up to date
-
-
         setContent {
             VoresKlimaplanTheme {
+                val classesViewModel: ClassesViewModel = viewModel() //problems hvis man fx drejer tlf og vender skærm //pointe rapport vi ændr den her
+
                 val navController = rememberNavController() //??
                 Navhost(navController = navController, classesViewModel = classesViewModel) //??
             }
