@@ -83,6 +83,7 @@ class GameViewModel: ViewModel() {
         yPositions.clear()
     }
 
+    //Chatgpth er bruget til koden neden under.
     fun updateTargetPosition() {
         val speed = (game.settings.targetSpeed * 0.05f) //Denne justere hastigheden baseret på faktoren i Game.kt
 
