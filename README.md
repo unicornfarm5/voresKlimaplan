@@ -15,3 +15,8 @@ Day two:
 Day three: 
 * En ekstra knap på gameLandingpage som fører til ClassScore, så man nemmere kan vise siden uden at skulle starte spil først.
 * Ny under-mapppe med filstruktur til spillet.
+
+Day four:
+* Få fixet glodens speed og finger præcision
+* Gør det app ikke kan flippes da det ødelægger den
+* 
