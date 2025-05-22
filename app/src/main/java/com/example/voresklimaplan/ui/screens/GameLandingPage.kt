@@ -1,9 +1,7 @@
 package com.example.voresklimaplan.ui.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -79,7 +77,9 @@ fun GameLandingPage(navController: NavController) {
                 buttonTekst = "\uD83C\uDFAE  SPIL  \uD83C\uDFAE",
                 fontFamily = PressStartFont,
                 fontSize = 18,
-                )
+                navController = navController,
+                navigateTo = "ScoreboardScreen" //todo midlertidigt
+            )
 
         }
     }

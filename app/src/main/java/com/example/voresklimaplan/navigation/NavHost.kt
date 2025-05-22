@@ -7,10 +7,12 @@ import androidx.navigation.compose.composable
 import com.example.voresklimaplan.ui.screens.BackgroundScreen
 import com.example.voresklimaplan.ui.screens.GameLandingPage
 import com.example.voresklimaplan.ui.screens.Game
+import com.example.voresklimaplan.ui.screens.ScoreboardScreen
+import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 
 @Composable
-fun Navhost(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "LandingPage") {
+fun Navhost(navController: NavHostController, classesViewModel: ClassesViewModel) {
+    NavHost(navController = navController, startDestination = "LearningPage") {
         composable("LearningPage") {
             BackgroundScreen(navController = navController)
         }
@@ -22,6 +24,12 @@ fun Navhost(navController: NavHostController) {
         composable("GameScreen") {
             Game(navController = navController) // hvis du har en sådan funktion
         }
+
+        composable("ScoreboardScreen") { //???
+            ScoreboardScreen(
+                navController = navController,
+                viewModel = classesViewModel
+            )
+        }
     }
 }
-
