@@ -1,4 +1,4 @@
-package com.example.voresklimaplan.data
+package com.example.voresklimaplan.common
 
 import androidx.compose.ui.graphics.Color
 

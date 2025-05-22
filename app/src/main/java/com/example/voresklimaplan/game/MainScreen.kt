@@ -1,6 +1,7 @@
 package com.example.voresklimaplan.game
 
 import android.media.Image
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Animatable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -41,7 +43,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-//Jonas
+//Føen og Jonas
 @Composable
 fun MainScreen(
     navController: NavController,
@@ -60,9 +62,18 @@ fun MainScreen(
 
     //Linea
     //starter spillet automatisk når game-siden åbnes
+    DisposableEffect(Unit) { //Hvis spillet lukkes stoppes spillet
+        onDispose {
+            gameViewModel.stopGame()
+         }
+    }
+    BackHandler { //Sørger for at spillet lukkes korrekt hvis der trykkes tilbage
+        gameViewModel.stopGame()
+        navController.popBackStack()
+    }
+
     LaunchedEffect(Unit) {
-        // Vent evt. lidt, så layout er klar
-        delay(500)
+        //delay(500) // Vent evt. lidt, så layout er klar
         gameViewModel.startGame()
     }
 
