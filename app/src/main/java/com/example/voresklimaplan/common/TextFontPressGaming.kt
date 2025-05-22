@@ -27,7 +27,8 @@ fun TextFontGaming(
         fontSize = fontSizeInput.sp,
         fontFamily = pressStartFont,
         lineHeight = (fontSizeInput + 10).sp,
-        modifier = Modifier.fillMaxWidth(), //for at kunne bruge align-center
+        modifier = Modifier,
+            //.fillMaxWidth(), //for at kunne bruge align-center
         textAlign = align
     )
 
