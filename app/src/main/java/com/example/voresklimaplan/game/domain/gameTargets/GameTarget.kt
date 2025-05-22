@@ -20,6 +20,6 @@ class FallingGameTarget(
     //System.currentTimeMillis()
 
     //kordinater
-    val xCordinate: Int,
-    val yCordinate: Int
+    var xCordinate: Int,
+    var yCordinate: Int
 ): GameTarget(targetName, goodForClimate, imageId,)
