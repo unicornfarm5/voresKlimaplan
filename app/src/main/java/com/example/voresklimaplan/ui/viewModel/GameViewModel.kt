@@ -19,11 +19,12 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class GameViewModel: ViewModel() {
-    val game: Game by mutableStateOf(Game())
+    var game: Game by mutableStateOf(Game())
     var moveDirection: MoveDirection by mutableStateOf(MoveDirection.None)
     var screenWidth: Int by mutableIntStateOf(800)
     var screenHeight:  Int by mutableIntStateOf(1600)
     val earthOffsetX: Animatable<Float, AnimationVector1D> by mutableStateOf(Animatable(0f))
+    //private var gameLoopJob: Job? = null //noget fra chatten som nok ikke skal bruges mere
 
     val activeGameTargets = mutableStateListOf<FallingGameTarget>() //den bruger de aktive
 
@@ -79,6 +80,8 @@ class GameViewModel: ViewModel() {
 
     fun stopGame() {
         game.status = GameStatus.Over
+        //gameLoopJob?.cancel()
+        //gameLoopJob = null
         activeGameTargets.clear()
         yPositions.clear()
     }
