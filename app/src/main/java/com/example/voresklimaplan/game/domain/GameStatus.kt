@@ -5,3 +5,4 @@ enum class GameStatus {
     Started,
     Over
 }
+

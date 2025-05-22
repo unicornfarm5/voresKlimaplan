@@ -23,7 +23,7 @@ class GameViewModel: ViewModel() {
     var game: Game by mutableStateOf(Game())
     var moveDirection: MoveDirection by mutableStateOf(MoveDirection.None)
     var screenWidth: Int by mutableIntStateOf(800)
-    var screenHeight:  Int by mutableIntStateOf(1600)
+    var screenHeight:  Int by mutableIntStateOf(1600) //why this state og hardcodet på samme tid
     val earthOffsetX: Animatable<Float, AnimationVector1D> by mutableStateOf(Animatable(0f))
     //private var gameLoopJob: Job? = null //noget fra chatten som nok ikke skal bruges mere
 

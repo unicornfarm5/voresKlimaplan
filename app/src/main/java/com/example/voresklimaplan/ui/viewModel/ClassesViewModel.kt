@@ -28,6 +28,7 @@ class ClassesViewModel : ViewModel() {
                 _classList.addAll(result) // Tilføjer de hentede classes og opdaterer UI da det er StateList
 
                 println(result)
+
             } catch (e: Exception) {
                 println("Fejl: ${e.message}")
             }
