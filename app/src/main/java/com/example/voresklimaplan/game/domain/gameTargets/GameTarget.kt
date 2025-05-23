@@ -5,7 +5,7 @@ import com.example.voresklimaplan.game.domain.Game
 //Linea
 open class GameTarget(
     val targetName: String,
-    val goodForClimate: Boolean,
+    var goodForClimate: Boolean,
     val imageId: Int //det er lokasionen til billedet                                                 - det finder man ved at println(R.drawable.game_bike) i main
 )
 

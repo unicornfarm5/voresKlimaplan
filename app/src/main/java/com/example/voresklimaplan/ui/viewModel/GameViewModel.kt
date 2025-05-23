@@ -39,6 +39,7 @@ class GameViewModel: ViewModel() {
     private val yPositions = mutableMapOf<Long, Float>()
 
     //Game targets
+    //Føen
     val gameTargets = listOf(
         GameTarget("Bike", true, 2131165295),
         GameTarget("Windmill", true, 2131165302),
@@ -90,6 +91,7 @@ class GameViewModel: ViewModel() {
     }
 
     fun stopGame() {
+        println("game stopped")
         game.status = GameStatus.Over
         activeGameTargets.clear()
         yPositions.clear()
@@ -98,7 +100,6 @@ class GameViewModel: ViewModel() {
     //Chatgpth er bruget til koden neden under.
     fun updateTargetPosition(density: Float) {
         val speed = (game.settings.targetSpeed * 0.05f) //Denne justere hastigheden baseret på faktoren i Game.kt
-
         val targetsToRemove = mutableListOf<FallingGameTarget>()
         //val toResetTargets = mutableListOf<FallingGameTarget>() // En midlertidig liste til targets, der skal nulstilles
 
@@ -108,22 +109,46 @@ class GameViewModel: ViewModel() {
             yPositions[target.id] = newY //Her bliver y-positionen opdateret i map
             target.yCordinate = newY.toInt()
 
-            if (checkColliosion(target, density)) {
-                score += 1
-                targetsToRemove.add(target)
-            } else if (newY > screenHeight) {
+            //hvis ikke element ikke fanges af jorden forsvinder det
+            if (newY > screenHeight) {
                 targetsToRemove.add(target)
             }
-        }
 
+            //hvis et element fanges af jorden så:
+            if (checkCollision(target, density)) {
+                when (target.goodForClimate) {
+                    //du rammer en god ting og får point
+                    true -> {
+                        println("juhu du har valgt en god ting")
+                        score += 10
+                        targetsToRemove.add(target)
+                    }
+
+                    //du rammer der ikke er god for klimaet  og game over
+                    false -> {
+                        println("you snooze you lose")
+                        stopGame()
+
+                        //sende de nye fangede point til firestore
+                        //vises game over skærm
+                        //
+                    }
+                }
+            }
+        }
         // Fjern fangede eller forsvundne targets
         targetsToRemove.forEach {
             activeGameTargets.remove(it)
-            yPositions.remove(it.id)
+
+
+            // yPositions.remove(it.id)
         }
     }
 
-    private fun checkColliosion(target: FallingGameTarget, density: Float): Boolean {
+    private fun checkCollision(
+        target: FallingGameTarget,
+        density: Float
+    ): Boolean {
         val earthY = screenHeight - earthHeight //Klodens y-position
         val earthX = earthOffsetX.value
 
@@ -132,15 +157,19 @@ class GameViewModel: ViewModel() {
             size = Size(earthWidth.toFloat(), earthHeight.toFloat())
         )
 
-        val targetSizePx = 150 * density
+        val targetSizePx = 100 * density
 
         val targetRect = Rect (
             offset = Offset(target.xCordinate.toFloat(), target.yCordinate.toFloat()),
             size = Size(targetSizePx, targetSizePx)
         )
+        println("Collision: ${earthRect.overlaps(targetRect)}")
         return earthRect.overlaps(targetRect)
-
     }
+
+
+
 }
+
 
 

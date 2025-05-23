@@ -31,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.game.domain.MoveDirection
+import com.example.voresklimaplan.game.domain.gameTargets.GameTarget
 import com.example.voresklimaplan.game.util.detectMoveGesture
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 import com.example.voresklimaplan.ui.viewModel.GameViewModel
@@ -45,9 +46,9 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
     val density = LocalDensity.current.density
 
     // Hent billedet som ImageBitmap til Canvas
-    val earthImageBitmap = ImageBitmap.imageResource(R.drawable.game_earth)
-    val earthWidth = earthImageBitmap.width
-    val earthHeight = earthImageBitmap.height
+    val earthImage = ImageBitmap.imageResource(R.drawable.game_earth)
+    val earthWidth = earthImage.width
+    val earthHeight = earthImage.height
 
     //Sender værdierne over til viewModel
     gameViewModel.earthWidth = earthWidth
@@ -76,13 +77,6 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
 
     //Jonas
     Column {
-        Text(
-            text = "Score: ${gameViewModel.score}",
-            fontSize = 24.sp,
-            color = Color.Black,
-            modifier = Modifier
-                .padding(top = 16.dp)
-        )
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -125,10 +119,18 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
                 contentScale = ContentScale.Crop
             )
 
+            Text(
+                text = "Score: ${gameViewModel.score}",
+                fontSize = 24.sp,
+                color = Color.Black,
+                modifier = Modifier
+                    .padding(top = 16.dp)
+            )
+
             // Jordkloden tegnes
             Canvas(modifier = Modifier.fillMaxSize()) {
                 drawImage(
-                    image = earthImageBitmap,
+                    image = earthImage,
                     topLeft = Offset(
                         x = gameViewModel.earthOffsetX.value,
                         y = size.height - earthHeight // placer i bunden
