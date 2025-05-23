@@ -8,9 +8,9 @@ import com.example.voresklimaplan.game.MainScreen
 import com.example.voresklimaplan.ui.screens.BackgroundScreen
 import com.example.voresklimaplan.ui.screens.ClassTown
 import com.example.voresklimaplan.ui.screens.GameLandingPage
-import com.example.voresklimaplan.ui.screens.GameScreen
 import com.example.voresklimaplan.ui.screens.ScoreboardScreen
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
+import com.example.voresklimaplan.ui.viewModel.GameViewModel
 
 @Composable
 fun Navhost(navController: NavHostController, classesViewModel: ClassesViewModel) {

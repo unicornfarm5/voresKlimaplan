@@ -155,7 +155,7 @@ fun ClimaSteps(modifier: Modifier = Modifier) {
             description = "Brug det tøj du har – og pas godt på det.\n\nByt eller køb genbrug i stedet for nyt.\n\nSmid mindre ud: Genbrug er guld for klimaet!"
         ),
         StepButtonData(
-            "Spis Klimavenlig",
+            "Spis Klimavenligt",
             Color(0xFFF29B9B),
             textColor = Color(0xFF8A1F1F),
             description = "\nSpis mere frugt og grønt – det er bedre for klimaet end kød.\n\nVælg økologisk og lokalt, hvis du kan.\n\nBrug dine penge klogt: Støt mad, der er god for jorden."
