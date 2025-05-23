@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.voresklimaplan.R
+import com.example.voresklimaplan.game.domain.GameStatus
 import com.example.voresklimaplan.game.domain.MoveDirection
 import com.example.voresklimaplan.game.domain.gameTargets.GameTarget
 import com.example.voresklimaplan.game.util.detectMoveGesture
@@ -40,8 +42,9 @@ import kotlinx.coroutines.launch
 //Føen og Jonas
 @Composable
 fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
-    val context = LocalContext.current  // Her henter vi Context
     val gameViewModel: GameViewModel = viewModel() //instans af gameViewModel
+
+    val context = LocalContext.current  // Her henter vi Context
     val classList = viewModel.classList
     val density = LocalDensity.current.density
 
@@ -67,6 +70,17 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
         gameViewModel.stopGame()
         navController.popBackStack()
     }
+
+    //håndtering af game over
+    val gameStatus  = gameViewModel.game.status
+    // Check if game is over
+    LaunchedEffect(gameStatus) {
+        if (gameStatus == GameStatus.Over) {
+            navController.navigate("GameOverScreen") {
+            }
+        }
+    }
+
 
     //Linea
     //starter spillet automatisk når game-siden åbnes
