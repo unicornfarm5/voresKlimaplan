@@ -40,9 +40,13 @@ class GameViewModel: ViewModel() {
 
     //Game targets
     val gameTargets = listOf(
-        GameTarget("Cykel", true, 2131165295),
-        GameTarget("Vindmølle", true, 2131165302),
-        GameTarget("Solceller", true, 2131165300)
+        GameTarget("Bike", true, 2131165295),
+        GameTarget("Windmill", true, 2131165302),
+        GameTarget("Solar panel", true, 2131165300),
+        GameTarget("Cow", false, 2131165334),
+        GameTarget("Diesel", false, 2131165335),
+        GameTarget("Apple", true, 2131165333),
+        GameTarget("Plane", false, 2131165336)
     )
 
     //Bruges til at lave nye FallingGameTargets og bruges når vi tilføjer dem til ActivegameTargetListen
