@@ -21,11 +21,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+//Linea
 class GameViewModel: ViewModel() {
     var game: Game by mutableStateOf(Game())
     var moveDirection: MoveDirection by mutableStateOf(MoveDirection.None)
     var screenWidth: Int by mutableIntStateOf(800)
-    var screenHeight:  Int by mutableIntStateOf(1600)
+    var screenHeight:  Int by mutableIntStateOf(1600) //why this state og hardcodet på samme tid
     val earthOffsetX: Animatable<Float, AnimationVector1D> by mutableStateOf(Animatable(0f))
     var earthHeight by mutableIntStateOf(0)
     var earthWidth by mutableIntStateOf(0)

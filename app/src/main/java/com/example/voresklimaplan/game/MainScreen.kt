@@ -69,6 +69,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
 
     val scope = rememberCoroutineScope()
 
+
     DisposableEffect(Unit) { //Hvis spillet lukkes stoppes spillet
         onDispose {
             gameViewModel.stopGame()
@@ -79,11 +80,14 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
         navController.popBackStack()
     }
 
+    //Linea
+    //starter spillet automatisk når game-siden åbnes
     LaunchedEffect(Unit) {
         //delay(500) // Vent evt. lidt, så layout er klar
         gameViewModel.startGame(density)
     }
 
+    //Jonas
     Column {
         Text(
             text = "Score: ${gameViewModel.score}",
@@ -144,6 +148,9 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
                     )
                 )
             }
+
+            //Linea
+            //Falling GameTargets
             gameViewModel.activeGameTargets.forEach { fallingGameTarget ->
                 val xDp = with(LocalDensity.current) { fallingGameTarget.xCordinate.toDp() }
                 val yDp = with(LocalDensity.current) { fallingGameTarget.yCordinate.toDp() }
