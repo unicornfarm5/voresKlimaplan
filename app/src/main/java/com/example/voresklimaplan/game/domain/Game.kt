@@ -8,5 +8,5 @@ data class Game(
 
 data class GameSettings(
     val earthSpeed: Float = 15f,
-    val targetSpeed: Float=20f
+    val targetSpeed: Float= 25f
 )

@@ -2,11 +2,17 @@ package com.example.voresklimaplan.ui.viewModel
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.forEachGesture
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameMillis
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.PointerInputScope
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.voresklimaplan.game.domain.Game
@@ -17,99 +23,123 @@ import com.example.voresklimaplan.game.domain.gameTargets.GameTarget
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
+import com.google.firebase.firestore.FirebaseFirestore
 
-class GameViewModel: ViewModel() {
-    var game: Game by mutableStateOf(Game())
-    var moveDirection: MoveDirection by mutableStateOf(MoveDirection.None)
-    var screenWidth: Int by mutableIntStateOf(800)
-    var screenHeight:  Int by mutableIntStateOf(1600)
-    val earthOffsetX: Animatable<Float, AnimationVector1D> by mutableStateOf(Animatable(0f))
-    //private var gameLoopJob: Job? = null //noget fra chatten som nok ikke skal bruges mere
+        class GameViewModel: ViewModel() {
+            val db = FirebaseFirestore.getInstance()
+            var game: Game by mutableStateOf(Game())
+            var moveDirection: MoveDirection by mutableStateOf(MoveDirection.None)
+            var screenWidth: Int by mutableIntStateOf(800)
+            var screenHeight:  Int by mutableIntStateOf(1600)
+            val earthOffsetX: Animatable<Float, AnimationVector1D> by mutableStateOf(Animatable(0f))
+            var score by mutableIntStateOf(0)
 
-    val activeGameTargets = mutableStateListOf<FallingGameTarget>() //den bruger de aktive
+            //private var gameLoopJob: Job? = null //noget fra chatten som nok ikke skal bruges mere
+            val activeGameTargets = mutableStateListOf<FallingGameTarget>() //den bruger de aktive
 
-    private val yPositions = mutableMapOf<Long, Float>()
 
-    //Game targets
-    val gameTargets = listOf(
-        GameTarget("Cykel", true, 2131165295),
-        GameTarget("Vindmølle", true, 2131165302),
-        GameTarget("Solceller", true, 2131165300)
-    )
 
-    //bruges til at lave nye FallingGameTargets og bruges når vi tilføjer dem til ActivegameTargetListen
-    fun createRandomTarget(): FallingGameTarget {
-        val gameTarget = gameTargets.random()
-        val newTarget = FallingGameTarget(
-            targetName = gameTarget.targetName,
-            goodForClimate = gameTarget.goodForClimate,
-            imageId = gameTarget.imageId,
-            id = System.currentTimeMillis(),
-            xCordinate = Random.nextInt(0, screenWidth),
-            yCordinate = 0
-        )
-        yPositions[newTarget.id] = 0f
-        return newTarget
-    }
-    //skal kaldes ved game start og skal derfor launches inde i gameScreen/mainScreen så spillet starter
+            private val yPositions = mutableMapOf<Long, Float>()
 
-    fun startGame() {
-        //context: Context, // giver adgang til at oprette viewet
-        game.settings = game.settings.copy(targetSpeed = 60f)
-        //først opdateres gameStatus
-        game.status = GameStatus.Started
-        activeGameTargets.clear()
-        yPositions.clear()
+            //Game targets
+            val gameTargets = listOf(
+                GameTarget("Bike", true, 2131165295),
+                GameTarget("Windmill", true, 2131165302),
+                GameTarget("Solar panel", true, 2131165300),
+                GameTarget("Cow", false, 2131165334),
+                GameTarget("Diesel", false, 2131165335),
+                GameTarget("Apple", true, 2131165333),
+                GameTarget("Plane", false, 2131165336)
 
-        //så kører spawning nemlig
-        viewModelScope.launch {
-            // Spawn a new target every 2 seconds
-            while (game.status == GameStatus.Started) {
-                activeGameTargets.add(createRandomTarget())
-                delay(2000L)
+
+            )
+
+            //bruges til at lave nye FallingGameTargets og bruges når vi tilføjer dem til ActivegameTargetListen
+            fun createRandomTarget(): FallingGameTarget {
+                val gameTarget = gameTargets.random()
+                val newTarget = FallingGameTarget(
+                    targetName = gameTarget.targetName,
+                    goodForClimate = gameTarget.goodForClimate,
+                    imageId = gameTarget.imageId,
+                    id = System.currentTimeMillis(),
+                    xCordinate = Random.nextInt(0, screenWidth),
+                    yCordinate = 0
+                )
+                yPositions[newTarget.id] = 0f
+                return newTarget
             }
-        }
+            //skal kaldes ved game start og skal derfor launches inde i gameScreen/mainScreen så spillet starter
 
-        viewModelScope.launch {
-            while (game.status == GameStatus.Started) {
-                updateTargetPosition()
-                delay(16L)
+            fun startGame() {
+                game.settings = game.settings.copy(targetSpeed = 170f)
+                game.status = GameStatus.Started
+                activeGameTargets.clear()
+                yPositions.clear()
+
+                }
+
+
+            fun stopGame() {
+                game.status = GameStatus.Over
+                saveScoreToFirebase(score) // <-- gemmer score i Firebase
+                activeGameTargets.clear()
+                yPositions.clear()
             }
-        }
-    }
+            fun saveScoreToFirebase(score: Int) {
+                val scoreData = hashMapOf(
+                    "score" to score,
+                    "timestamp" to System.currentTimeMillis()
+                )
 
-    fun stopGame() {
-        game.status = GameStatus.Over
-        //gameLoopJob?.cancel()
-        //gameLoopJob = null
-        activeGameTargets.clear()
-        yPositions.clear()
-    }
-
-    //Chatgpth er bruget til koden neden under.
-    fun updateTargetPosition() {
-        val speed = (game.settings.targetSpeed * 0.05f) //Denne justere hastigheden baseret på faktoren i Game.kt
-
-        val toResetTargets = mutableListOf<FallingGameTarget>() // En midlertidig liste til targets, der skal nulstilles
-
-        activeGameTargets.forEach { target ->
-            val currentY = yPositions[target.id] ?: 0f //Henter den nuværende y-position
-            val newY = currentY + speed //Denne udregner den nyge y-position baseret på farten.
-            yPositions[target.id] = newY //Her bliver y-positionen opdateret i map
-
-            target.yCordinate = newY.toInt()
-
-            //Hvis target er under skærmkanten bliver den resetet.
-            if (newY > screenHeight) {
-                toResetTargets.add(target)
+                db.collection("scores")
+                    .add(scoreData)
+                    .addOnSuccessListener {
+                        println("✅ Score gemt i Firebase")
+                    }
+                    .addOnFailureListener { e ->
+                        println("❌ Fejl ved gemning: ${e.message}")
+                    }
             }
-        }
 
-        //Her bliver targetsene resetet, når de falder ned under jorden.
-        toResetTargets.forEach { target ->
-            yPositions[target.id] = 0f
-            target.xCordinate = Random.nextInt(0, screenWidth)
-            target.yCordinate = 0
-        }
-    }
-}
+            fun updateGame(deltaMillis: Long) {
+                // logic here
+            }
+
+            fun updateTargetPosition(deltaMillis: Long) {
+                val speed = game.settings.targetSpeed
+                val toRemove = mutableListOf<FallingGameTarget>()
+
+                activeGameTargets.forEach { target ->
+                    val currentY = yPositions[target.id] ?: 0f
+                    val deltaY = speed * (deltaMillis /1000f)
+                    val newY = currentY + deltaY
+                    yPositions[target.id] = newY
+                    target.yCordinate = newY.toInt()
+
+                    if (newY > screenHeight) toRemove.add(target)
+                }
+
+                toRemove.forEach { target ->
+                    activeGameTargets.remove(target)
+                    yPositions.remove(target.id)
+                }
+            }
+
+            // Add detectHorizontalDragGestures manually if needed:
+            suspend fun PointerInputScope.detectHorizontalDragGestures(
+                onDrag: (PointerInputChange, Float) -> Unit
+            ) {
+                forEachGesture {
+                    awaitPointerEventScope {
+                        val down = awaitFirstDown()
+                        var change = down
+                        do {
+                            val event = awaitPointerEvent()
+                            val dragAmount = event.changes.first().positionChange().x
+                            onDrag(change, dragAmount)
+                            change = event.changes.first()
+                        } while (event.changes.any { it.pressed })
+                    }
+                }
+            }}
+

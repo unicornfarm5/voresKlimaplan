@@ -11,9 +11,10 @@ import com.example.voresklimaplan.ui.screens.GameLandingPage
 import com.example.voresklimaplan.ui.screens.GameScreen
 import com.example.voresklimaplan.ui.screens.ScoreboardScreen
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
+import com.example.voresklimaplan.ui.viewModel.GameViewModel
 
 @Composable
-fun Navhost(navController: NavHostController, classesViewModel: ClassesViewModel) {
+fun AppNavHost(navController: NavHostController, classesViewModel: ClassesViewModel, gameViewModel: GameViewModel) {
     NavHost(navController = navController, startDestination = "LearningPage") {
         composable("LearningPage") {
             BackgroundScreen(navController = navController)
@@ -25,7 +26,7 @@ fun Navhost(navController: NavHostController, classesViewModel: ClassesViewModel
 
         composable("MainScreen") {
             MainScreen(navController = navController,
-                       viewModel = classesViewModel
+                       gameViewModel = gameViewModel
             ) // hvis du har en sådan funktion
         }
 
