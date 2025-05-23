@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,7 +52,8 @@ fun ScoreboardScreen (navController: NavHostController, viewModel: ClassesViewMo
         //UI-indhold som ligger ovenpå baggrund
         Column () {
             val scoreboardClasses = classList.map { it.className } //Her oprettes en ny liste ud fra classList bare kun med className
-            Scoreboard(scoreboardClasses = scoreboardClasses)
+            val scoreboardScores = classList.map { it.score }
+            Scoreboard(scoreboardClasses = scoreboardClasses, scoreboardScores = scoreboardScores)
 
             ScoreboardMenu(navController)
         }
@@ -59,7 +61,7 @@ fun ScoreboardScreen (navController: NavHostController, viewModel: ClassesViewMo
 }
 
 @Composable
-fun Scoreboard (scoreboardClasses: List<String>) {
+fun Scoreboard (scoreboardClasses: List<String>, scoreboardScores: List<Int>) {
     Box (
         modifier = Modifier
             .fillMaxWidth()
@@ -84,13 +86,11 @@ fun Scoreboard (scoreboardClasses: List<String>) {
                     .offset(x = (25).dp, y = (10).dp)
             )
             {
-                scoreboardClasses.forEach { scoreboardClass ->
-                    TextFontGaming(scoreboardClass, fontSizeInput = 11)
-                    Spacer(modifier = Modifier.height(15.dp))
-                }
+                scoreboardClasses.zip(scoreboardScores).forEach { (scoreboardClass, scoreBoardScore) ->
+                    TextFontGaming(textInput = "$scoreboardClass $scoreBoardScore", fontSizeInput = 11)
             }
         }
-
+        }
     }
 }
 
@@ -141,6 +141,7 @@ Box (
     }
 }
 }
+
 
 /*
 @Preview(showBackground = true)

@@ -166,9 +166,6 @@ class GameViewModel: ViewModel() {
         println("Collision: ${earthRect.overlaps(targetRect)}")
         return earthRect.overlaps(targetRect)
     }
-
-
-
 }
 
 
