@@ -21,17 +21,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.common.TextFontGaming
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
+import com.example.voresklimaplan.ui.viewModel.GameViewModel
 
 
 @Composable
-fun ScoreboardScreen (navController: NavHostController, viewModel: ClassesViewModel
+fun ScoreboardScreen (
+    navController: NavHostController,
+    viewModel: ClassesViewModel
 ) {
+    val gameViewModel: GameViewModel = viewModel() //instans af gameViewModel så vi kan finde socre
     val classList = viewModel.classList //Henter listen fra ViewModel
+
+    //lægger scoren fra spillet gemt i gameViewModel sammen med scoren senest hentet fra firestore gemt i ClassesViewModel
+    val newScore = gameViewModel.score + classList[0].score
+
+    LaunchedEffect(Unit) {
+        viewModel.saveScoreInFireBase("BJYAEk0hrL0s0WipYngc", newScore)
+        //id fra firestore til klima fighters klassen så scoren gemt i gameViewModel kan sendes til klassen
+    }
 
     LaunchedEffect(Unit) { //Kører kun koden en gang ved visning af Composable og ikke ved state ændringer
         viewModel.getAllClasses() //Henter alle klasserne fra firestore

@@ -78,7 +78,7 @@ class GameViewModel: ViewModel() {
             // Spawn a new target every 2 seconds
             while (game.status == GameStatus.Started) {
                 activeGameTargets.add(createRandomTarget())
-                delay(2000L)
+                delay(5000L)
             }
         }
 
