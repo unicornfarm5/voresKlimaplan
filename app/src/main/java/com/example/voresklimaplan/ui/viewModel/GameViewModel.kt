@@ -95,6 +95,7 @@ class GameViewModel: ViewModel() {
         game.status = GameStatus.Over
         activeGameTargets.clear()
         yPositions.clear()
+
     }
 
     //Chatgpth er bruget til koden neden under.

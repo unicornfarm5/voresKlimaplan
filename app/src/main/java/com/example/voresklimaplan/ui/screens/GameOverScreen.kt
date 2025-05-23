@@ -67,7 +67,7 @@ fun GameOverScreen(
                 fontFamily = PressStartFont,
                 fontSize = 18,
                 navController = navController,
-                navigateTo = "GameScreen"
+                navigateTo = "MainScreen"
             )
 //Linea
             PurpleButton(

@@ -31,8 +31,7 @@ fun SpawnTownLevelImages() {
     val gameViewModel: GameViewModel = viewModel() //instans af gameViewModel
     val townScore: Int =
         gameViewModel.game.score //skal nok i virkeligheden hente en mustableStateOf(Int) form for score fra viewmodel
-    //val level = townScore / 100
-    val level = 6
+    val level = townScore / 100
 
         BoxWithConstraints(
             modifier = Modifier
