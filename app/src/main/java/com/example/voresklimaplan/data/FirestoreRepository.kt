@@ -18,7 +18,7 @@ class FirestoreRepository {
             .toObjects(Classroom::class.java) //Her konverteres de hentede dokumenter om til en instans af klassen Classroom
     }
 
-
+//Jonas
     suspend fun updateScoreInFirebase(
         classroomId: String,
         newScore: Int
