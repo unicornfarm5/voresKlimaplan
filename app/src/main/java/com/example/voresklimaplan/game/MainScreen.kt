@@ -60,7 +60,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
 
     val scope = rememberCoroutineScope()
 
-
+//Jonas
     DisposableEffect(Unit) { //Hvis spillet lukkes stoppes spillet
         onDispose {
             gameViewModel.stopGame()
