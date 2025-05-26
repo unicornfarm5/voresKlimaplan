@@ -41,6 +41,18 @@ android {
     buildFeatures {
         compose = true
     }
+
+    // Løser problemet med dublerede licensfiler i test-APK'en
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE.txt"
+            )
+        }
+    }
 }
 
 dependencies {
@@ -71,7 +83,8 @@ dependencies {
 
     // --- Game (fra NinjaBubble_Game eksempel) ---
     implementation(libs.sprite) // Sprite KMP
-    implementation(libs.androidx.media3.exoplayer) // ExoPlayer
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.monitor) // ExoPlayer
 
     // --- Unit Tests (test/ folder) ---
     testImplementation(libs.junit)

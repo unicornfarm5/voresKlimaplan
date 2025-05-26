@@ -25,6 +25,7 @@ navigationComposeAndroid = "2.9.0"
 sprite = "1.0.6"
 truth = "1.4.1"
 uiTextGoogleFonts = "1.8.2"
+monitor = "1.7.2"
 
 [libraries]
 androidx-core = { module = "androidx.test:core", version.ref = "core" }
@@ -59,6 +60,7 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockkAndroid" }
 sprite = { module = "com.stevdza-san:sprite", version.ref = "sprite" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
+androidx-monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }
 
 
 [plugins]
