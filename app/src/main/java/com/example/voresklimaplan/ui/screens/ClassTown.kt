@@ -54,6 +54,8 @@ fun SpawnTownLevelImages(
             //den nederst halvdel af skærmen er græs, så alle tingene skal placeres random nederste halvdel
             val randomX = Random.nextInt(0, screenWidth)
             val randomY = Random.nextInt(screenHeight / 2, screenHeight)
+            val randomX2 = Random.nextInt(0, screenWidth)
+            val randomY2 = Random.nextInt(screenHeight / 2, screenHeight)
 
             Image(
                 painter = painterResource(R.drawable.game_windmill),
@@ -72,8 +74,8 @@ fun SpawnTownLevelImages(
                     modifier = Modifier
                         .offset {
                             IntOffset(
-                                x = randomX,
-                                y = randomY
+                                x = randomX2,
+                                y = randomY2
                             )
                         }
                 )

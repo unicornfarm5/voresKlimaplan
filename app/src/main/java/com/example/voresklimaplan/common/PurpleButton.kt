@@ -17,17 +17,24 @@ import androidx.navigation.NavController
 @Composable
 //Linea, Jonas og Føen
 fun PurpleButton(
-    navController: NavController, //??
-    navigateTo: String,
+    navController: NavController,
+    navigateTo: String? = null,//optional parameter
     buttonTekst: String,
     fontFamily: FontFamily,
-    fontSize: Int
+    fontSize: Int,
+    onClick: (() -> Unit)? = null,//optional parameter
 ) {
     val color = Color("#D2BFFF".toColorInt()) //lilla farve fra figma prototypen
 
     Button(
         onClick = {
-            navController.navigate(navigateTo) //??
+            //knappen kan navigere men kan også bruges uden navigation
+            if (navigateTo != null ) {
+                navController.navigate(navigateTo)
+            }
+            if (onClick != null) {
+                onClick()
+            }
         },
         colors = ButtonDefaults.buttonColors(containerColor = color),
         border = BorderStroke(2.dp, Color.Black),
