@@ -29,7 +29,7 @@ import com.example.voresklimaplan.common.TextFontGaming
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 import com.example.voresklimaplan.ui.viewModel.GameViewModel
 
-
+//Jonas
 @Composable
 fun ScoreboardScreen (
     navController: NavHostController,
@@ -39,16 +39,17 @@ fun ScoreboardScreen (
     val classList = viewModel.classList //Henter listen fra ViewModel
 
     //lægger scoren fra spillet gemt i gameViewModel sammen med scoren senest hentet fra firestore gemt i ClassesViewModel
-    val newScore = gameViewModel.score + classList[0].score
-
-    LaunchedEffect(Unit) {
-        viewModel.saveScoreInFireBase("BJYAEk0hrL0s0WipYngc", newScore)
-        //id fra firestore til klima fighters klassen så scoren gemt i gameViewModel kan sendes til klassen
-    }
+    //val newScore = gameViewModel.score + classList[0].score
 
     LaunchedEffect(Unit) { //Kører kun koden en gang ved visning af Composable og ikke ved state ændringer
         viewModel.getAllClasses() //Henter alle klasserne fra firestore
     }
+
+    /*LaunchedEffect(Unit) {
+        viewModel.saveScoreInFireBase("BJYAEk0hrL0s0WipYngc", newScore)
+        //id fra firestore til klima fighters klassen så scoren gemt i gameViewModel kan sendes til klassen
+    }
+     */
 
     Box(
         modifier = Modifier
@@ -88,7 +89,7 @@ fun Scoreboard (scoreboardClasses: List<String>, scoreboardScores: List<Int>) {
                     .fillMaxSize()
 
             )
-        Column (                            //todo Husk at gøre så navne automatisk passer ind i scoreboard!
+        Column (
             modifier = Modifier
                 .offset(x = (5).dp, y = (25).dp)
                 .height(200.dp)

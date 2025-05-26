@@ -7,6 +7,7 @@ import com.example.voresklimaplan.data.Classroom
 import com.example.voresklimaplan.data.FirestoreRepository
 import kotlinx.coroutines.launch
 
+//Jonas
 class ClassesViewModel : ViewModel() {
     private val firestoreRepository = FirestoreRepository() // Her oprettes en instans af FirestoreRepository
 
@@ -39,6 +40,7 @@ class ClassesViewModel : ViewModel() {
             try {
                 firestoreRepository.updateScoreInFirebase(classroomId, score)
             } catch (e: Exception) {
+                println("Fejl: ${e.message}")
             }
         }
     }

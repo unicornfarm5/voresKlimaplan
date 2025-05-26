@@ -168,6 +168,3 @@ class GameViewModel: ViewModel() {
         return earthRect.overlaps(targetRect)
     }
 }
-
-
-

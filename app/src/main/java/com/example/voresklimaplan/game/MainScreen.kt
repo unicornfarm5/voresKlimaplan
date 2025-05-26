@@ -44,8 +44,8 @@ import kotlinx.coroutines.launch
 fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
     val gameViewModel: GameViewModel = viewModel() //instans af gameViewModel
 
-    val context = LocalContext.current  // Her henter vi Context
-    val classList = viewModel.classList
+    //val context = LocalContext.current  // Her henter vi Context. Bruges ikke
+    //val classList = viewModel.classList // bruges ikke
     val density = LocalDensity.current.density
 
     // Hent billedet som ImageBitmap til Canvas
@@ -76,6 +76,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
     // Check if game is over
     LaunchedEffect(gameStatus) {
         if (gameStatus == GameStatus.Over) {
+            viewModel.saveScoreInFireBase("BJYAEk0hrL0s0WipYngc", gameViewModel.score)
             navController.navigate("GameOverScreen") {
             }
         }
