@@ -28,13 +28,16 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
     }
@@ -42,9 +45,11 @@ android {
 
 dependencies {
 
+    // --- AndroidX + Jetpack Compose ---
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -52,37 +57,38 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.androidx.navigation.compose.android)
+    implementation(libs.androidx.ui.text.google.fonts)
+
+    // --- Firebase ---
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.firestore.ktx)
+
+    // --- Dependency Injection (Koin) ---
+    implementation(libs.koin.android)
+    implementation(libs.koin.core)
+    implementation(libs.koin.compose)
+
+    // --- Game (fra NinjaBubble_Game eksempel) ---
+    implementation(libs.sprite) // Sprite KMP
+    implementation(libs.androidx.media3.exoplayer) // ExoPlayer
+
+    // --- Unit Tests (test/ folder) ---
     testImplementation(libs.junit)
+    testImplementation(libs.truth)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
+
+    // --- Instrumented Tests (androidTest/ folder) ---
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.truth)
+    androidTestImplementation(libs.androidx.core)
+    androidTestImplementation(libs.mockk.android)
+
+    // --- Debug Tools (kun i udvikling) ---
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-    //Game -dependencies fra https://github.com/stevdza-san/NinjaBubble_Game/blob/main/gradle/libs.versions.toml
-    //men chatGPT har lavet dem om til build.gradle, før var i i libs.version.toml
-        // Sprite KMP
-        implementation("com.stevdza-san:sprite:1.0.0") // <-- Tjek den rigtige version
-
-        // ExoPlayer
-        implementation("androidx.media3:media3-exoplayer:1.3.0") // <-- Eksempel på version
-
-        // Koin
-        implementation("io.insert-koin:koin-android:3.5.0")
-        implementation("io.insert-koin:koin-core:3.5.0")
-        implementation("io.insert-koin:koin-compose:1.1.0")
-
-
-
-    //Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.firestore.ktx)
-    //navigation
-    implementation(libs.androidx.navigation.compose)
-    //til google fonts
-    implementation("androidx.compose.material3:material3:1.2.1")
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.4")
-
 }

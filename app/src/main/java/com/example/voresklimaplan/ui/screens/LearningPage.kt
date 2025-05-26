@@ -1,5 +1,7 @@
 package com.example.voresklimaplan.ui.screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,12 +31,14 @@ import com.example.voresklimaplan.common.dynaPuffFont
 import com.example.voresklimaplan.common.StepButtonData
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 
 
 //Nikoleta har været her
 @Composable
 fun BackgroundScreen(navController: NavController) {
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -56,7 +60,12 @@ fun BackgroundScreen(navController: NavController) {
                 fontFamily = dynaPuffFont,
                 fontSize = 25,
                 navController = navController,
-                navigateTo = "ScoreboardScreen" // Jonas denne linje
+                onClick = {
+                    //ide fra chatGPT
+                    Intent(Intent.ACTION_VIEW, Uri.parse("https://skole.voresklimaplan.dk/")).apply {
+                        context.startActivity(this)
+                    }
+                }
             )
 
             CustomDivider()
