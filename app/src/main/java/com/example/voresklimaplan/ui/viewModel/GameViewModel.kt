@@ -140,8 +140,6 @@ class GameViewModel: ViewModel() {
         // Fjern fangede eller forsvundne targets
         targetsToRemove.forEach {
             activeGameTargets.remove(it)
-
-
             // yPositions.remove(it.id)
         }
     }

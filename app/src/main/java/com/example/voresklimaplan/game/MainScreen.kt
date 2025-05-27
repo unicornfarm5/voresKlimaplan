@@ -72,7 +72,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
     }
 
     //håndtering af game over
-    val gameStatus  = gameViewModel.game.status
+    val gameStatus = gameViewModel.game.status
     // Check if game is over
     LaunchedEffect(gameStatus) {
         if (gameStatus == GameStatus.Over) {
@@ -81,7 +81,6 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
             }
         }
     }
-
 
     //Linea
     //starter spillet automatisk når game-siden åbnes
