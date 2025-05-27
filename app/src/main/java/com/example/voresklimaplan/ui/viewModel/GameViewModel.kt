@@ -59,7 +59,6 @@ class GameViewModel: ViewModel() {
     //Bruges til at lave nye FallingGameTargets og bruges når vi tilføjer dem til ActivegameTargetListen
     fun createRandomTarget(): FallingGameTarget {
         val gameTarget = gameTargets.random()
-
         val newTarget = FallingGameTarget(
             targetName = gameTarget.targetName,
             goodForClimate = gameTarget.goodForClimate,
@@ -79,17 +78,16 @@ class GameViewModel: ViewModel() {
         game = game.copy(status = GameStatus.Started) //Først opdateres gameStatus
         activeGameTargets.clear()
         score = 0
-        game = game.copy(status = GameStatus.Started)
         spawnJob?.cancel()
 
         //Så kører spawning nemlig
         spawnJob=viewModelScope.launch {
             while (isActive && game.status == GameStatus.Started) {
-                if (activeGameTargets.size < 5) {
+                if (activeGameTargets.size < 6) { // gør der ikke er så mange targets i frame
                     activeGameTargets.add(createRandomTarget())
                     println("Spawned new target")
                 }
-                delay(1000L)
+                delay(200L)
             }
 
         }}
@@ -97,7 +95,6 @@ class GameViewModel: ViewModel() {
         fun stopGame() {
             game = game.copy(status = GameStatus.Over)
                 spawnJob?.cancel()
-
         }
 
         //Chatgpth er bruget til koden neden under.

@@ -96,6 +96,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
     gameViewModel.earthWidth = earthWidth
     gameViewModel.earthHeight = earthHeight
 
+
     LaunchedEffect(Unit) {
         gameViewModel.startGame(density)
     }
@@ -246,6 +247,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                 .then(Modifier.drawBehind { tick.value }) // Trig rendering
             )
         }}}
+
 
 
 //Linea
