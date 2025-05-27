@@ -56,17 +56,13 @@ import kotlinx.coroutines.isActive
 
 //Føen og Jonas
 //@RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
-
 @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 @Composable
 fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameViewModel: GameViewModel) {
-
-  //  val context = LocalContext.current  // Her henter vi Context
-  //  val classList = viewModel.classList
     val density = LocalDensity.current.density
     var layoutReady by remember { mutableStateOf(false) }
     val tick = remember { mutableStateOf(0L) }
-    val TARGET_SIZE_DP = 80.dp // vælg en størrelse du synes passer
+    val TARGET_SIZE_DP = 80.dp // så man bruger samme str
     val TARGET_SIZE_PX = with(LocalDensity.current) { TARGET_SIZE_DP.toPx() }
 
     val scope = rememberCoroutineScope()
@@ -76,18 +72,19 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
     val earthWidth = earthImage.width
     val earthHeight = earthImage.height
 
-    // Føen laver target billeder om til imagebitmap som er mindre krævende at rendere
-    val imageCache = remember { mutableMapOf<Int, ImageBitmap>() }
+    // Chatten har lavet denne kode
+    //laver target billeder om til imagebitmap som er mindre krævende at rendere
 
+    val imageCache = remember { mutableMapOf<Int, ImageBitmap>() }
     gameViewModel.gameTargets.forEach { target ->
         if (!imageCache.containsKey(target.imageId)) {
-            // Brug runCatching til at fange load-fejl som en nullable
+
             val bm: ImageBitmap? = runCatching {
                 ImageBitmap.imageResource(id = target.imageId)
             }.onFailure { e ->
                 Log.w(
                     "GameImages",
-                    "⚠️ Kunne ikke loade “${target.targetName}” (id=${target.imageId}): ${e.message}"
+                    "Kunne ikke loade “${target.targetName}” (id=${target.imageId}): ${e.message}"
                 )
             }.getOrNull()
 
@@ -96,10 +93,9 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
         }
     }
 
-    //Sender værdierne over til viewModel
+    //Sender værdier over til viewModel
     gameViewModel.earthWidth = earthWidth
     gameViewModel.earthHeight = earthHeight
-
 
 
 //Jonas
@@ -114,16 +110,23 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
         navController.popBackStack()
     }
 
+    LaunchedEffect(Unit) {
+        gameViewModel.startGame(density)
+    }
+
 // Check if game is over
-    LaunchedEffect(gameViewModel.gameStatus) {
-        if (gameViewModel.gameStatus == GameStatus.Over) {
+    LaunchedEffect(gameViewModel.game.status) {
+        if (gameViewModel.game.status == GameStatus.Over) {
             println("Navigating to GameOverScreen")
             viewModel.saveScoreInFireBase("BJYAEk0hrL0s0WipYngc", gameViewModel.score)
-            navController.navigate("GameOverScreen") {
+            navController.navigate("GameOverScreen")
+
+            {
             }
         }
     }
 
+    // Spillet venter til layout før den starter
     LaunchedEffect(layoutReady) {
         println("layoutReady = $layoutReady, game status = ${gameViewModel.game.status}")
         if (layoutReady && gameViewModel.game.status != GameStatus.Started) {
@@ -131,8 +134,6 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
             gameViewModel.startGame(density)
         }
     }
-
-
 
 //føen
 
@@ -144,11 +145,12 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                 val deltaTimeMillis = (now - lastFrameTime) / 1_000_000L
                 lastFrameTime = now
 
-                // Kun opdater targets, hvis spillet stadig er aktivt
+                // odaterer kun targets, hvis spillet stadig er aktivt
                 if (gameViewModel.game.status == GameStatus.Started) {
                     gameViewModel.updateTargetPosition(density, deltaTimeMillis)
 
                 }
+                // gør at der hele tiden er en ændring
                 tick.value = now
 
                // Stopper loopet, hvis spillet er slut
@@ -158,8 +160,6 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
         onDispose { job.cancel() }
     }
 
-
-
     //Jonas
     Column {
         Box(
@@ -168,7 +168,6 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                 .onGloballyPositioned {
                     gameViewModel.screenWidth = it.size.width
                     gameViewModel.screenHeight = it.size.height
-
 
                     // Startposition: midt i bunden
                     if (!gameViewModel.hasCenteredEarth) {
@@ -199,6 +198,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                     }
                 }
         ) {
+
             // Baggrund
             Image(
                 painter = painterResource(R.drawable.background_game),
@@ -216,12 +216,12 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
             )
 
             // Jordkloden tegnes
+
             Canvas(modifier = Modifier
                 .fillMaxSize()
                 .then(Modifier.drawBehind { tick.value }))
             {
                 // Targets
-
                 gameViewModel.activeGameTargets.forEach { target ->
                     // Du skal selv have cachet billeder med ImageBitmap!
                     val bitmap = imageCache[target.imageId]

@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 import androidx.compose.runtime.withFrameNanos
 import com.example.voresklimaplan.R
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 
 
@@ -39,14 +40,13 @@ class GameViewModel: ViewModel() {
     var earthWidth by mutableIntStateOf(0)
     var hasCenteredEarth by mutableStateOf(false) //??
     val targetSizePx = 200
-    var gameEnded by mutableStateOf(false)
+    private var spawnJob: Job? = null
 
     val activeGameTargets = mutableStateListOf<FallingGameTarget>() //den bruger de aktive
     var score by mutableIntStateOf(0)
 
-    var gameStatus by mutableStateOf(GameStatus.NotStarted)
 
-    //Game targets
+
     //Føen
     val gameTargets = listOf(
         GameTarget("Bike", true, R.drawable.game_bike),
@@ -74,42 +74,41 @@ class GameViewModel: ViewModel() {
 
     }
 
-    //Skal kaldes ved game start og skal derfor launches inde i gameScreen/mainScreen så spillet starter
 
+    //Skal kaldes ved game start og skal derfor launches inde i gameScreen/mainScreen så spillet starter
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     fun startGame(density: Float) {
         //context: Context, // giver adgang til at oprette viewet
         game.settings = game.settings.copy(targetSpeed = 1000f)
-        game.status = GameStatus.Started //Først opdateres gameStatus
+        game = game.copy(status = GameStatus.Started) //Først opdateres gameStatus
         activeGameTargets.clear()
-        gameEnded = false
+        score = 0
+        game = game.copy(status = GameStatus.Started)
+        spawnJob?.cancel()
 
         //Så kører spawning nemlig
-        viewModelScope.launch {
+        spawnJob=viewModelScope.launch {
             while (isActive && game.status == GameStatus.Started) {
-                if (activeGameTargets.size < 10) {
+                if (activeGameTargets.size < 5) {
                     activeGameTargets.add(createRandomTarget())
                     println("Spawned new target")
                 }
-                delay(400L)
+                delay(1000L)
             }
 
         }}
 
         fun stopGame() {
-            if (game.status != GameStatus.Over) {
                 println("game stopped AT: ${System.currentTimeMillis()}")
-                gameStatus = GameStatus.Over
+            game = game.copy(status = GameStatus.Over)
+                spawnJob?.cancel()
 
-            }
         }
 
 
         //Chatgpth er bruget til koden neden under.
         fun updateTargetPosition(density: Float, deltaMillis: Long) {
-            println("📦 updateTargetPosition: deltaMillis = $deltaMillis, speed = ${game.settings.targetSpeed}")
-
-           /* if (game.status == GameStatus.Over) return*/
+            println("updateTargetPosition: deltaMillis = $deltaMillis, speed = ${game.settings.targetSpeed}")
 
             val speed = game.settings.targetSpeed
             val targetsToRemove = mutableListOf<FallingGameTarget>()
@@ -120,19 +119,17 @@ class GameViewModel: ViewModel() {
                 println("🔽 Target '${target.targetName}' ny y = ${target.yCordinate}")
 
                 if (target.yCordinate > screenHeight) {
-                    targetsToRemove.add(target)
+                  targetsToRemove.add(target)
                 }
-                // 2. Check collision – kun her stopper spillet ved bad targets!
-                else if (checkCollision(target, density)) {
 
+                //  Check collision
+                if (checkCollision(target, density)) {
                     if (target.goodForClimate) {
-                        println("juhu du har valgt en god ting")
                         score += 10
                         targetsToRemove.add(target)
-
                     } else {
-                        println("you snooze you lose! BAD target collided.")
-                        stopGame()
+                        game = game.copy(status = GameStatus.Over)
+                        targetsToRemove.add(target)
                     }
                 }
             }
@@ -141,7 +138,6 @@ class GameViewModel: ViewModel() {
                 activeGameTargets.remove(it)
             }
         }
-
 
 
     private fun checkCollision(
@@ -160,8 +156,7 @@ class GameViewModel: ViewModel() {
 
         val targetRect = Rect(
             offset = Offset(target.xCordinate.toFloat(), target.yCordinate.toFloat()),
-            size = Size(targetSizePx.toFloat(), targetSizePx.toFloat()) // 👈 cast til Float her
-        )
+            size = Size(targetSizePx.toFloat(), targetSizePx.toFloat())  )
 
         val collision = earthRect.overlaps(targetRect)
         return collision
