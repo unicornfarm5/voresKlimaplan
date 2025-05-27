@@ -1,5 +1,8 @@
 package com.example.voresklimaplan.navigation
 
+import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -13,8 +16,11 @@ import com.example.voresklimaplan.ui.screens.ScoreboardScreen
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 import com.example.voresklimaplan.ui.viewModel.GameViewModel
 
+@SuppressLint("ViewModelConstructorInComposable")
+@RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 @Composable
-fun Navhost(navController: NavHostController, classesViewModel: ClassesViewModel) {
+fun Navhost(navController: NavHostController, classesViewModel: ClassesViewModel,gameViewModel: GameViewModel) {
+
     NavHost(navController = navController, startDestination = "LearningPage") {
         composable("LearningPage") {
             BackgroundScreen(navController = navController)
@@ -25,15 +31,18 @@ fun Navhost(navController: NavHostController, classesViewModel: ClassesViewModel
         }
 
         composable("MainScreen") {
-            MainScreen(navController = navController,
-                       viewModel = classesViewModel
-            ) // hvis du har en sådan funktion
+            MainScreen(
+                navController = navController,
+                viewModel = classesViewModel,
+                gameViewModel = gameViewModel
+            )
         }
 
         composable("ScoreboardScreen") { //???
             ScoreboardScreen(
                 navController = navController,
-                viewModel = classesViewModel
+                viewModel = classesViewModel,
+                gameViewModel = gameViewModel
             )
         }
 
@@ -46,7 +55,8 @@ fun Navhost(navController: NavHostController, classesViewModel: ClassesViewModel
 
         composable("GameOverScreen") { //???
             GameOverScreen(
-                navController = navController
+                navController = navController,
+                gameViewModel = gameViewModel
             )
         }
     }

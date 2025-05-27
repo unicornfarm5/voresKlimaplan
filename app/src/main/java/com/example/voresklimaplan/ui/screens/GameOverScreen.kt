@@ -21,12 +21,14 @@ import com.example.voresklimaplan.R
 import com.example.voresklimaplan.common.PurpleButton
 import com.example.voresklimaplan.common.TextFontBubbles
 import com.example.voresklimaplan.common.TextFontGaming
+import com.example.voresklimaplan.ui.viewModel.GameViewModel
 
 @Composable
 //start over screen - meget lig gameLandingPage
 //Linea
 fun GameOverScreen(
-    navController: NavController
+    navController: NavController,
+    gameViewModel: GameViewModel
 ) {
     val RubikBubbles = FontFamily(
         Font(R.font.rubikbubbles, weight = FontWeight.Normal)

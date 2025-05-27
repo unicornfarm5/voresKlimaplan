@@ -1,7 +1,7 @@
 package com.example.voresklimaplan.game.domain
 
 data class Game(
-    var status: GameStatus = GameStatus.Idle,
+    var status: GameStatus = GameStatus.NotStarted,
     var score: Int = 0,
     var settings: GameSettings = GameSettings()
 )

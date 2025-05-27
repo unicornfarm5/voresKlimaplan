@@ -33,9 +33,10 @@ import com.example.voresklimaplan.ui.viewModel.GameViewModel
 @Composable
 fun ScoreboardScreen (
     navController: NavHostController,
-    viewModel: ClassesViewModel
+    viewModel: ClassesViewModel,
+    gameViewModel: GameViewModel
 ) {
-    val gameViewModel: GameViewModel = viewModel() //instans af gameViewModel så vi kan finde socre
+    //val gameViewModel: GameViewModel = viewModel() //instans af gameViewModel så vi kan finde socre
     val classList = viewModel.classList //Henter listen fra ViewModel
 
     //lægger scoren fra spillet gemt i gameViewModel sammen med scoren senest hentet fra firestore gemt i ClassesViewModel

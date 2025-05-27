@@ -1,7 +1,7 @@
 package com.example.voresklimaplan.game.domain
 
 enum class GameStatus {
-    Idle,
+    NotStarted,
     Started,
     Over
 }

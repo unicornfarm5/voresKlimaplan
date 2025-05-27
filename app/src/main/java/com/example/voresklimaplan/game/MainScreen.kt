@@ -1,6 +1,9 @@
 package com.example.voresklimaplan.game
 
+import android.os.Build
+import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -13,7 +16,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -38,27 +46,61 @@ import com.example.voresklimaplan.game.util.detectMoveGesture
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 import com.example.voresklimaplan.ui.viewModel.GameViewModel
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.withFrameNanos
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 
 //Føen og Jonas
-@Composable
-fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
-    val gameViewModel: GameViewModel = viewModel() //instans af gameViewModel
+//@RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 
-    //val context = LocalContext.current  // Her henter vi Context. Bruges ikke
-    //val classList = viewModel.classList // bruges ikke
+@RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+@Composable
+fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameViewModel: GameViewModel) {
+
+  //  val context = LocalContext.current  // Her henter vi Context
+  //  val classList = viewModel.classList
     val density = LocalDensity.current.density
+    var layoutReady by remember { mutableStateOf(false) }
+    val tick = remember { mutableStateOf(0L) }
+    val TARGET_SIZE_DP = 80.dp // vælg en størrelse du synes passer
+    val TARGET_SIZE_PX = with(LocalDensity.current) { TARGET_SIZE_DP.toPx() }
+
+    val scope = rememberCoroutineScope()
 
     // Hent billedet som ImageBitmap til Canvas
     val earthImage = ImageBitmap.imageResource(R.drawable.game_earth)
     val earthWidth = earthImage.width
     val earthHeight = earthImage.height
 
+    // Føen laver target billeder om til imagebitmap som er mindre krævende at rendere
+    val imageCache = remember { mutableMapOf<Int, ImageBitmap>() }
+
+    gameViewModel.gameTargets.forEach { target ->
+        if (!imageCache.containsKey(target.imageId)) {
+            // Brug runCatching til at fange load-fejl som en nullable
+            val bm: ImageBitmap? = runCatching {
+                ImageBitmap.imageResource(id = target.imageId)
+            }.onFailure { e ->
+                Log.w(
+                    "GameImages",
+                    "⚠️ Kunne ikke loade “${target.targetName}” (id=${target.imageId}): ${e.message}"
+                )
+            }.getOrNull()
+
+            // Hvis load lykkedes, gem bitmap i cache
+            bm?.let { imageCache[target.imageId] = it }
+        }
+    }
+
     //Sender værdierne over til viewModel
     gameViewModel.earthWidth = earthWidth
     gameViewModel.earthHeight = earthHeight
 
 
-    val scope = rememberCoroutineScope()
 
 //Jonas
     DisposableEffect(Unit) { //Hvis spillet lukkes stoppes spillet
@@ -66,29 +108,57 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
             gameViewModel.stopGame()
          }
     }
+
     BackHandler { //Sørger for at spillet lukkes korrekt hvis der trykkes tilbage
         gameViewModel.stopGame()
         navController.popBackStack()
     }
 
-    //håndtering af game over
-    val gameStatus  = gameViewModel.game.status
-    // Check if game is over
-    LaunchedEffect(gameStatus) {
-        if (gameStatus == GameStatus.Over) {
+// Check if game is over
+    LaunchedEffect(gameViewModel.gameStatus) {
+        if (gameViewModel.gameStatus == GameStatus.Over) {
+            println("Navigating to GameOverScreen")
             viewModel.saveScoreInFireBase("BJYAEk0hrL0s0WipYngc", gameViewModel.score)
             navController.navigate("GameOverScreen") {
             }
         }
     }
 
-
-    //Linea
-    //starter spillet automatisk når game-siden åbnes
-    LaunchedEffect(Unit) {
-        //delay(500) // Vent evt. lidt, så layout er klar
-        gameViewModel.startGame(density)
+    LaunchedEffect(layoutReady) {
+        println("layoutReady = $layoutReady, game status = ${gameViewModel.game.status}")
+        if (layoutReady && gameViewModel.game.status != GameStatus.Started) {
+            println(" startGame kaldt")
+            gameViewModel.startGame(density)
+        }
     }
+
+
+
+//føen
+
+    DisposableEffect(Unit) {
+        val job = scope.launch {
+            var lastFrameTime = System.nanoTime()
+            while (gameViewModel.game.status != GameStatus.Over && isActive) {
+                val now = withFrameNanos { it }
+                val deltaTimeMillis = (now - lastFrameTime) / 1_000_000L
+                lastFrameTime = now
+
+                // Kun opdater targets, hvis spillet stadig er aktivt
+                if (gameViewModel.game.status == GameStatus.Started) {
+                    gameViewModel.updateTargetPosition(density, deltaTimeMillis)
+
+                }
+                tick.value = now
+
+               // Stopper loopet, hvis spillet er slut
+                delay(20L)
+            }
+        }
+        onDispose { job.cancel() }
+    }
+
+
 
     //Jonas
     Column {
@@ -99,6 +169,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
                     gameViewModel.screenWidth = it.size.width
                     gameViewModel.screenHeight = it.size.height
 
+
                     // Startposition: midt i bunden
                     if (!gameViewModel.hasCenteredEarth) {
                         scope.launch {
@@ -106,12 +177,14 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
                             gameViewModel.hasCenteredEarth = true
                         }
                     }
+
+                    layoutReady = true
                 }
                 .pointerInput(Unit) {
                     awaitPointerEventScope {
                         detectMoveGesture(
                             gameStatus = gameViewModel.game.status,
-                            onMove = { deltaX -> //Ny kode som gør glode mere smooth
+                            onMove = { deltaX -> //Ny kode som gør globe mere smooth
                                 scope.launch {
                                     val newX = (gameViewModel.earthOffsetX.value + deltaX)
                                         .coerceIn(0f, gameViewModel.screenWidth - earthWidth.toFloat())
@@ -143,18 +216,48 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
             )
 
             // Jordkloden tegnes
-            Canvas(modifier = Modifier.fillMaxSize()) {
+            Canvas(modifier = Modifier
+                .fillMaxSize()
+                .then(Modifier.drawBehind { tick.value }))
+            {
+                // Targets
+
+                gameViewModel.activeGameTargets.forEach { target ->
+                    // Du skal selv have cachet billeder med ImageBitmap!
+                    val bitmap = imageCache[target.imageId]
+                    if (bitmap != null) {
+                        drawImage(
+                            image = bitmap,
+                            srcOffset = IntOffset(0, 0),
+                            srcSize = IntSize(bitmap.width, bitmap.height),
+                            dstOffset = IntOffset(target.xCordinate.toInt(), target.yCordinate.toInt()),
+                            dstSize = IntSize(TARGET_SIZE_PX.toInt(), TARGET_SIZE_PX.toInt())
+                        )
+
+                    }
+                }
+
+                // Earth
                 drawImage(
                     image = earthImage,
                     topLeft = Offset(
                         x = gameViewModel.earthOffsetX.value,
-                        y = size.height - earthHeight // placer i bunden
+                        y = size.height - earthHeight
                     )
                 )
             }
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .then(Modifier.drawBehind { tick.value }) // Trig rendering
+            )
+        }}}
 
-            //Linea
+
+
+//Linea
+
             //Falling GameTargets
+                /*
             gameViewModel.activeGameTargets.forEach { fallingGameTarget ->
                 val xDp = with(LocalDensity.current) { fallingGameTarget.xCordinate.toDp() }
                 val yDp = with(LocalDensity.current) { fallingGameTarget.yCordinate.toDp() }
@@ -170,4 +273,4 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel) {
         }
     }
 }
-//fra https://www.youtube.com/watch?v=LXZw2RyV06s&t=849s
+//fra https://www.youtube.com/watch?v=LXZw2RyV06s&t=849s */

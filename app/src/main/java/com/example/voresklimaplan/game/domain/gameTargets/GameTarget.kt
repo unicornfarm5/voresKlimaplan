@@ -17,5 +17,5 @@ class FallingGameTarget(
 
     //kordinater
     var xCordinate: Int,
-    var yCordinate: Int
+    var yCordinate: Float
 ): GameTarget(targetName, goodForClimate, imageId,)
