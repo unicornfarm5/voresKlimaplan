@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -23,11 +24,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 import androidx.compose.runtime.withFrameNanos
+import androidx.compose.ui.graphics.ImageBitmap
 import com.example.voresklimaplan.R
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
-
-
 
 //Linea
 class GameViewModel: ViewModel() {
@@ -38,6 +38,8 @@ class GameViewModel: ViewModel() {
     val earthOffsetX: Animatable<Float, AnimationVector1D> by mutableStateOf(Animatable(0f))
     var earthHeight by mutableIntStateOf(0)
     var earthWidth by mutableIntStateOf(0)
+    var layoutReady  by mutableStateOf(false)
+    val imageCache: MutableMap<Int, ImageBitmap> = mutableMapOf()
     var hasCenteredEarth by mutableStateOf(false) //??
     val targetSizePx = 200
     private var spawnJob: Job? = null
@@ -97,10 +99,10 @@ class GameViewModel: ViewModel() {
                 spawnJob?.cancel()
         }
 
+
         //Chatgpth er bruget til koden neden under.
         fun updateTargetPosition(density: Float, deltaMillis: Long) {
             println("updateTargetPosition: deltaMillis = $deltaMillis, speed = ${game.settings.targetSpeed}")
-
             val speed = game.settings.targetSpeed
             val targetsToRemove = mutableListOf<FallingGameTarget>()
 

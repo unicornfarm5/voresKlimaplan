@@ -51,6 +51,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
+import com.example.voresklimaplan.common.pressStartFont
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
@@ -60,7 +61,6 @@ import kotlinx.coroutines.isActive
 @Composable
 fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameViewModel: GameViewModel) {
     val density = LocalDensity.current.density
-    var layoutReady by remember { mutableStateOf(false) }
     val tick = remember { mutableStateOf(0L) }
     val TARGET_SIZE_DP = 80.dp // så man bruger samme str
     val TARGET_SIZE_PX = with(LocalDensity.current) { TARGET_SIZE_DP.toPx() }
@@ -74,10 +74,8 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
 
     // Chatten har lavet denne kode
     //laver target billeder om til imagebitmap som er mindre krævende at rendere
-    val imageCache = remember { mutableMapOf<Int, ImageBitmap>() }
     gameViewModel.gameTargets.forEach { target ->
-        if (!imageCache.containsKey(target.imageId)) {
-
+        if (!gameViewModel.imageCache.containsKey(target.imageId)) {
             val bm: ImageBitmap? = runCatching {
                 ImageBitmap.imageResource(id = target.imageId)
             }.onFailure { e ->
@@ -88,7 +86,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
             }.getOrNull()
 
             // Hvis load lykkedes, gem bitmap i cache
-            bm?.let { imageCache[target.imageId] = it }
+            bm?.let { gameViewModel.imageCache[target.imageId] = it }
         }
     }
 
@@ -124,9 +122,9 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
     }
 
     // Spillet venter til layout før den starter
-    LaunchedEffect(layoutReady) {
-        println("layoutReady = $layoutReady, game status = ${gameViewModel.game.status}")
-        if (layoutReady && gameViewModel.game.status != GameStatus.Started) {
+    LaunchedEffect(gameViewModel.layoutReady) {
+        println("layoutReady = $gameViewModel.layoutReady, game status = ${gameViewModel.game.status}")
+        if (gameViewModel.layoutReady && gameViewModel.game.status != GameStatus.Started) {
             println(" startGame kaldt")
             gameViewModel.startGame(density)
         }
@@ -144,7 +142,6 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                 // odaterer kun targets, hvis spillet stadig er aktivt
                 if (gameViewModel.game.status == GameStatus.Started) {
                     gameViewModel.updateTargetPosition(density, deltaTimeMillis)
-
                 }
                 // gør at der hele tiden er en ændring --> gør det muligt for spillet at køre smooth
                 tick.value = now
@@ -172,8 +169,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                             gameViewModel.hasCenteredEarth = true
                         }
                     }
-
-                    layoutReady = true
+                    gameViewModel.layoutReady = true
                 }
                 .pointerInput(Unit) {
                     awaitPointerEventScope {
@@ -206,6 +202,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
             Text(
                 text = "Score: ${gameViewModel.score}",
                 fontSize = 24.sp,
+                fontFamily = pressStartFont,
                 color = Color.Black,
                 modifier = Modifier
                     .padding(top = 16.dp)
@@ -220,7 +217,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                 gameViewModel.activeGameTargets.forEach { target ->
 
                     // cachet billeder med ImageBitmap
-                    val bitmap = imageCache[target.imageId]
+                    val bitmap = gameViewModel.imageCache[target.imageId]
                     if (bitmap != null) {
                         drawImage(
                             image = bitmap,

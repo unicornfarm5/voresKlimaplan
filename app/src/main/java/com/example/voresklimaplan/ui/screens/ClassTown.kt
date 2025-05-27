@@ -39,7 +39,6 @@ fun SpawnTownLevelImages(
     val townScore: Int = classesViewModel.classList[0].score
     val level = townScore / 100
 
-
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
@@ -114,7 +113,7 @@ fun ClassTown(
             Spacer(modifier = Modifier.height(16.dp))
             //vi henter fra den første klasse i listen
             TextFontGaming(classList[0].className, 20, align = TextAlign.Center)
-            TextFontGaming(classList[0].score.toString(), 10, align = TextAlign.Center)
+            TextFontGaming(classList[0].score.toString(), 17, align = TextAlign.Center)
         }
 
 }
