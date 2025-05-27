@@ -20,6 +20,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VoresKlimaplanTheme {
+                println(R.drawable.game_apple)
+                println(R.drawable.game_bike)
+                println(R.drawable.game_solarpanel)
+                println(R.drawable.game_windmill)
+                println(R.drawable.game_diesel_car)
+                println(R.drawable.game_plane)
+                println(R.drawable.game_cow)
+
                 val classesViewModel: ClassesViewModel = viewModel() //problems hvis man fx drejer tlf og vender skærm //pointe rapport vi ændr den her
 
                 val navController = rememberNavController() //??
