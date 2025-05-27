@@ -74,7 +74,6 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
 
     // Chatten har lavet denne kode
     //laver target billeder om til imagebitmap som er mindre krævende at rendere
-
     val imageCache = remember { mutableMapOf<Int, ImageBitmap>() }
     gameViewModel.gameTargets.forEach { target ->
         if (!imageCache.containsKey(target.imageId)) {
@@ -97,6 +96,9 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
     gameViewModel.earthWidth = earthWidth
     gameViewModel.earthHeight = earthHeight
 
+    LaunchedEffect(Unit) {
+        gameViewModel.startGame(density)
+    }
 
 //Jonas
     DisposableEffect(Unit) { //Hvis spillet lukkes stoppes spillet
@@ -110,9 +112,6 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
         navController.popBackStack()
     }
 
-    LaunchedEffect(Unit) {
-        gameViewModel.startGame(density)
-    }
 
 // Check if game is over
     LaunchedEffect(gameViewModel.game.status) {
@@ -120,9 +119,6 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
             println("Navigating to GameOverScreen")
             viewModel.saveScoreInFireBase("BJYAEk0hrL0s0WipYngc", gameViewModel.score)
             navController.navigate("GameOverScreen")
-
-            {
-            }
         }
     }
 
@@ -136,7 +132,6 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
     }
 
 //føen
-
     DisposableEffect(Unit) {
         val job = scope.launch {
             var lastFrameTime = System.nanoTime()
@@ -150,7 +145,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                     gameViewModel.updateTargetPosition(density, deltaTimeMillis)
 
                 }
-                // gør at der hele tiden er en ændring
+                // gør at der hele tiden er en ændring --> gør det muligt for spillet at køre smooth
                 tick.value = now
 
                // Stopper loopet, hvis spillet er slut
@@ -216,14 +211,14 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
             )
 
             // Jordkloden tegnes
-
             Canvas(modifier = Modifier
                 .fillMaxSize()
                 .then(Modifier.drawBehind { tick.value }))
             {
                 // Targets
                 gameViewModel.activeGameTargets.forEach { target ->
-                    // Du skal selv have cachet billeder med ImageBitmap!
+
+                    // cachet billeder med ImageBitmap
                     val bitmap = imageCache[target.imageId]
                     if (bitmap != null) {
                         drawImage(
@@ -237,7 +232,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                     }
                 }
 
-                // Earth
+                // jordklode
                 drawImage(
                     image = earthImage,
                     topLeft = Offset(
@@ -251,7 +246,6 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                 .then(Modifier.drawBehind { tick.value }) // Trig rendering
             )
         }}}
-
 
 
 //Linea

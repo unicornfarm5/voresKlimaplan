@@ -45,8 +45,6 @@ class GameViewModel: ViewModel() {
     val activeGameTargets = mutableStateListOf<FallingGameTarget>() //den bruger de aktive
     var score by mutableIntStateOf(0)
 
-
-
     //Føen
     val gameTargets = listOf(
         GameTarget("Bike", true, R.drawable.game_bike),
@@ -74,11 +72,9 @@ class GameViewModel: ViewModel() {
 
     }
 
-
     //Skal kaldes ved game start og skal derfor launches inde i gameScreen/mainScreen så spillet starter
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     fun startGame(density: Float) {
-        //context: Context, // giver adgang til at oprette viewet
         game.settings = game.settings.copy(targetSpeed = 1000f)
         game = game.copy(status = GameStatus.Started) //Først opdateres gameStatus
         activeGameTargets.clear()
@@ -99,12 +95,10 @@ class GameViewModel: ViewModel() {
         }}
 
         fun stopGame() {
-                println("game stopped AT: ${System.currentTimeMillis()}")
             game = game.copy(status = GameStatus.Over)
                 spawnJob?.cancel()
 
         }
-
 
         //Chatgpth er bruget til koden neden under.
         fun updateTargetPosition(density: Float, deltaMillis: Long) {
@@ -116,7 +110,7 @@ class GameViewModel: ViewModel() {
             activeGameTargets.forEach { target ->
                 val deltaY = speed * (deltaMillis / 2000f)
                 target.yCordinate += deltaY
-                println("🔽 Target '${target.targetName}' ny y = ${target.yCordinate}")
+
 
                 if (target.yCordinate > screenHeight) {
                   targetsToRemove.add(target)
@@ -133,7 +127,6 @@ class GameViewModel: ViewModel() {
                     }
                 }
             }
-
             targetsToRemove.forEach {
                 activeGameTargets.remove(it)
             }
