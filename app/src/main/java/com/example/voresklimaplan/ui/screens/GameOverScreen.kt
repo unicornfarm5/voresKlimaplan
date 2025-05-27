@@ -55,11 +55,13 @@ fun GameOverScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            TextFontGaming("GAME OVER", 50)
-
             Spacer(modifier = Modifier.height(20.dp))
-
+            Text(
+                text = "GAME\n\nOVER",
+                fontSize = 50.sp,
+                textAlign = TextAlign.Center,
+                fontFamily = PressStartFont
+            )
             Spacer(modifier = Modifier.height(40.dp))
 
             PurpleButton(
@@ -67,7 +69,7 @@ fun GameOverScreen(
                 fontFamily = PressStartFont,
                 fontSize = 18,
                 navController = navController,
-                navigateTo = "GameScreen"
+                navigateTo = "MainScreen"
             )
 //Linea
             PurpleButton(

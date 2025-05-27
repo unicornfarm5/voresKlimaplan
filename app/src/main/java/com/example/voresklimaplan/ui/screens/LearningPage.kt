@@ -1,5 +1,7 @@
 package com.example.voresklimaplan.ui.screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,12 +31,14 @@ import com.example.voresklimaplan.common.dynaPuffFont
 import com.example.voresklimaplan.common.StepButtonData
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 
 
 //Nikoleta har været her
 @Composable
 fun BackgroundScreen(navController: NavController) {
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -56,7 +60,12 @@ fun BackgroundScreen(navController: NavController) {
                 fontFamily = dynaPuffFont,
                 fontSize = 25,
                 navController = navController,
-                navigateTo = "ScoreboardScreen" // Jonas denne linje
+                onClick = {
+                    //ide fra chatGPT
+                    Intent(Intent.ACTION_VIEW, Uri.parse("https://skole.voresklimaplan.dk/")).apply {
+                        context.startActivity(this)
+                    }
+                }
             )
 
             CustomDivider()
@@ -155,7 +164,7 @@ fun ClimaSteps(modifier: Modifier = Modifier) {
             description = "Brug det tøj du har – og pas godt på det.\n\nByt eller køb genbrug i stedet for nyt.\n\nSmid mindre ud: Genbrug er guld for klimaet!"
         ),
         StepButtonData(
-            "Spis Klimavenlig",
+            "Spis Klimavenligt",
             Color(0xFFF29B9B),
             textColor = Color(0xFF8A1F1F),
             description = "\nSpis mere frugt og grønt – det er bedre for klimaet end kød.\n\nVælg økologisk og lokalt, hvis du kan.\n\nBrug dine penge klogt: Støt mad, der er god for jorden."

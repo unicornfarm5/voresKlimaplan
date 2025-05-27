@@ -7,6 +7,7 @@ import com.example.voresklimaplan.data.Classroom
 import com.example.voresklimaplan.data.FirestoreRepository
 import kotlinx.coroutines.launch
 
+//Jonas
 class ClassesViewModel : ViewModel() {
     private val firestoreRepository = FirestoreRepository() // Her oprettes en instans af FirestoreRepository
 
@@ -18,8 +19,6 @@ class ClassesViewModel : ViewModel() {
         getAllClasses()
     }
 
-    // ved afsluttet spil skal Firestore's score opdateres + den funktion skal køre igen så scoreboard + by er up to date
-
     fun getAllClasses() {
         viewModelScope.launch { // Her startes en coroutine, så netværkskoden ikke blokerer UI når der hentes data
             try {
@@ -28,6 +27,18 @@ class ClassesViewModel : ViewModel() {
                 _classList.addAll(result) // Tilføjer de hentede classes og opdaterer UI da det er StateList
 
                 println(result)
+
+            } catch (e: Exception) {
+                println("Fejl: ${e.message}")
+            }
+        }
+    }
+
+    //Linea
+    fun saveScoreInFireBase(classroomId: String, score: Int) {
+        viewModelScope.launch {
+            try {
+                firestoreRepository.updateScoreInFirebase(classroomId, score)
             } catch (e: Exception) {
                 println("Fejl: ${e.message}")
             }

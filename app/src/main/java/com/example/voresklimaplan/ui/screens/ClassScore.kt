@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,21 +21,35 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.common.TextFontGaming
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
+import com.example.voresklimaplan.ui.viewModel.GameViewModel
 
-
+//Jonas
 @Composable
-fun ScoreboardScreen (navController: NavHostController, viewModel: ClassesViewModel
+fun ScoreboardScreen (
+    navController: NavHostController,
+    viewModel: ClassesViewModel
 ) {
+    val gameViewModel: GameViewModel = viewModel() //instans af gameViewModel så vi kan finde socre
     val classList = viewModel.classList //Henter listen fra ViewModel
+
+    //lægger scoren fra spillet gemt i gameViewModel sammen med scoren senest hentet fra firestore gemt i ClassesViewModel
+    //val newScore = gameViewModel.score + classList[0].score
 
     LaunchedEffect(Unit) { //Kører kun koden en gang ved visning af Composable og ikke ved state ændringer
         viewModel.getAllClasses() //Henter alle klasserne fra firestore
     }
+
+    /*LaunchedEffect(Unit) {
+        viewModel.saveScoreInFireBase("BJYAEk0hrL0s0WipYngc", newScore)
+        //id fra firestore til klima fighters klassen så scoren gemt i gameViewModel kan sendes til klassen
+    }
+     */
 
     Box(
         modifier = Modifier
@@ -51,7 +66,8 @@ fun ScoreboardScreen (navController: NavHostController, viewModel: ClassesViewMo
         //UI-indhold som ligger ovenpå baggrund
         Column () {
             val scoreboardClasses = classList.map { it.className } //Her oprettes en ny liste ud fra classList bare kun med className
-            Scoreboard(scoreboardClasses = scoreboardClasses)
+            val scoreboardScores = classList.map { it.score }
+            Scoreboard(scoreboardClasses = scoreboardClasses, scoreboardScores = scoreboardScores)
 
             ScoreboardMenu(navController)
         }
@@ -59,7 +75,7 @@ fun ScoreboardScreen (navController: NavHostController, viewModel: ClassesViewMo
 }
 
 @Composable
-fun Scoreboard (scoreboardClasses: List<String>) {
+fun Scoreboard (scoreboardClasses: List<String>, scoreboardScores: List<Int>) {
     Box (
         modifier = Modifier
             .fillMaxWidth()
@@ -73,7 +89,7 @@ fun Scoreboard (scoreboardClasses: List<String>) {
                     .fillMaxSize()
 
             )
-        Column (                            //todo Husk at gøre så navne automatisk passer ind i scoreboard!
+        Column (
             modifier = Modifier
                 .offset(x = (5).dp, y = (25).dp)
                 .height(200.dp)
@@ -84,13 +100,11 @@ fun Scoreboard (scoreboardClasses: List<String>) {
                     .offset(x = (25).dp, y = (10).dp)
             )
             {
-                scoreboardClasses.forEach { scoreboardClass ->
-                    TextFontGaming(scoreboardClass, fontSizeInput = 11)
-                    Spacer(modifier = Modifier.height(15.dp))
-                }
+                scoreboardClasses.zip(scoreboardScores).forEach { (scoreboardClass, scoreBoardScore) ->
+                    TextFontGaming(textInput = "$scoreboardClass $scoreBoardScore", fontSizeInput = 11)
             }
         }
-
+        }
     }
 }
 
@@ -141,6 +155,7 @@ Box (
     }
 }
 }
+
 
 /*
 @Preview(showBackground = true)
