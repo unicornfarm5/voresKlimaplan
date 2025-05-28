@@ -1,4 +1,4 @@
-package com.example.voresklimaplan.ui.screens
+package com.example.voresklimaplan.ui.appScreens
 
 import android.content.Intent
 import android.net.Uri
@@ -19,10 +19,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.ui.common.CustomDivider
 import com.example.voresklimaplan.ui.common.PurpleButton

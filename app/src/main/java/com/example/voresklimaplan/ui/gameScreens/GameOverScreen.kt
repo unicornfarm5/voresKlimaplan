@@ -1,4 +1,4 @@
-package com.example.voresklimaplan.ui.screens
+package com.example.voresklimaplan.ui.gameScreens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.ui.common.PurpleButton
-import com.example.voresklimaplan.ui.viewModel.GameViewModel
 
 @Composable
 //start over screen - meget lig gameLandingPage

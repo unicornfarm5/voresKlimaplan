@@ -1,4 +1,4 @@
-package com.example.voresklimaplan.ui.screens
+package com.example.voresklimaplan.ui.appScreens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image

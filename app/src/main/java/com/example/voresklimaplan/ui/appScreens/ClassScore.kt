@@ -1,4 +1,4 @@
-package com.example.voresklimaplan.ui.screens
+package com.example.voresklimaplan.ui.appScreens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -19,7 +19,6 @@ import androidx.navigation.NavHostController
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.ui.common.TextFontGaming
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
-import com.example.voresklimaplan.ui.viewModel.GameViewModel
 
 //Jonas på hele siden
 @Composable

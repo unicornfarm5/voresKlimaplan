@@ -1,4 +1,4 @@
-package com.example.voresklimaplan.game
+package com.example.voresklimaplan.ui.gameScreens
 
 import android.util.Log
 import androidx.activity.compose.BackHandler
@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.voresklimaplan.R
-import com.example.voresklimaplan.game.domain.GameStatus
-import com.example.voresklimaplan.game.domain.MoveDirection
+import com.example.voresklimaplan.game.domain.model.GameStatus
+import com.example.voresklimaplan.game.domain.model.MoveDirection
 import com.example.voresklimaplan.game.util.detectMoveGesture
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 import com.example.voresklimaplan.ui.viewModel.GameViewModel

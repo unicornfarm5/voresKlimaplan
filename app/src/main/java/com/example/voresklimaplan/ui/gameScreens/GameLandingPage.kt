@@ -1,4 +1,4 @@
-package com.example.voresklimaplan.ui.screens
+package com.example.voresklimaplan.ui.gameScreens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -16,8 +16,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.ui.common.PurpleButton
 import com.example.voresklimaplan.ui.common.TextFontBubbles

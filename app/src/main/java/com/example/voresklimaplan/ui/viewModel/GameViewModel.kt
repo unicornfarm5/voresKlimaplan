@@ -12,9 +12,9 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.voresklimaplan.game.domain.Game
-import com.example.voresklimaplan.game.domain.GameStatus
-import com.example.voresklimaplan.game.domain.MoveDirection
+import com.example.voresklimaplan.game.domain.model.Game
+import com.example.voresklimaplan.game.domain.model.GameStatus
+import com.example.voresklimaplan.game.domain.model.MoveDirection
 import com.example.voresklimaplan.game.domain.gameTargets.FallingGameTarget
 import com.example.voresklimaplan.game.domain.gameTargets.GameTarget
 import kotlinx.coroutines.delay
@@ -22,7 +22,6 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 import androidx.compose.ui.graphics.ImageBitmap
 import com.example.voresklimaplan.R
-import com.example.voresklimaplan.data.FirestoreRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
 

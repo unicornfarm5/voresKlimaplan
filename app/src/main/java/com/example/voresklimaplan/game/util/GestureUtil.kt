@@ -1,7 +1,7 @@
 package com.example.voresklimaplan.game.util
 
 import androidx.compose.ui.input.pointer.AwaitPointerEventScope
-import com.example.voresklimaplan.game.domain.GameStatus
+import com.example.voresklimaplan.game.domain.model.GameStatus
 
 /*Inspireret fra Youtube:
 https://www.youtube.com/watch?v=LXZw2RyV06s&t=849s

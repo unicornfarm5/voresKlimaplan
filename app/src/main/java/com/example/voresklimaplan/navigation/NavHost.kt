@@ -1,18 +1,15 @@
 package com.example.voresklimaplan.navigation
 
-import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.voresklimaplan.game.MainScreen
-import com.example.voresklimaplan.ui.screens.BackgroundScreen
-import com.example.voresklimaplan.ui.screens.ClassTown
-import com.example.voresklimaplan.ui.screens.GameLandingPage
-import com.example.voresklimaplan.ui.screens.GameOverScreen
-import com.example.voresklimaplan.ui.screens.ScoreboardScreen
+import com.example.voresklimaplan.ui.gameScreens.MainScreen
+import com.example.voresklimaplan.ui.appScreens.BackgroundScreen
+import com.example.voresklimaplan.ui.appScreens.ClassTown
+import com.example.voresklimaplan.ui.gameScreens.GameLandingPage
+import com.example.voresklimaplan.ui.gameScreens.GameOverScreen
+import com.example.voresklimaplan.ui.appScreens.ScoreboardScreen
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 import com.example.voresklimaplan.ui.viewModel.GameViewModel
 
