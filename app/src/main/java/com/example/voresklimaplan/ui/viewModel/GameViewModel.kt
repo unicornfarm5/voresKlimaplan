@@ -12,44 +12,50 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.voresklimaplan.game.domain.Game
-import com.example.voresklimaplan.game.domain.GameStatus
-import com.example.voresklimaplan.game.domain.MoveDirection
+import com.example.voresklimaplan.game.domain.model.Game
+import com.example.voresklimaplan.game.domain.model.GameStatus
+import com.example.voresklimaplan.game.domain.model.MoveDirection
 import com.example.voresklimaplan.game.domain.gameTargets.FallingGameTarget
 import com.example.voresklimaplan.game.domain.gameTargets.GameTarget
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
+import androidx.compose.ui.graphics.ImageBitmap
+import com.example.voresklimaplan.R
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
 
 //Linea
 class GameViewModel: ViewModel() {
     var game: Game by mutableStateOf(Game())
     var moveDirection: MoveDirection by mutableStateOf(MoveDirection.None)
     var screenWidth: Int by mutableIntStateOf(800)
-    var screenHeight:  Int by mutableIntStateOf(1600) //why this state og hardcodet på samme tid
+    var screenHeight:  Int by mutableIntStateOf(1800)
     val earthOffsetX: Animatable<Float, AnimationVector1D> by mutableStateOf(Animatable(0f))
     var earthHeight by mutableIntStateOf(0)
     var earthWidth by mutableIntStateOf(0)
-    private val targetSize = 50 // i pixels, afhænger af dp til px konvertering
-    var hasCenteredEarth by mutableStateOf(false) //??
+    var layoutReady  by mutableStateOf(false)
+    val imageCache: MutableMap<Int, ImageBitmap> = mutableMapOf()
+    var hasCenteredEarth by mutableStateOf(false)
+    var targetSizePx: Float = 0f
+    private var spawnJob: Job? = null
 
-    val activeGameTargets = mutableStateListOf<FallingGameTarget>() //den bruger de aktive
+    val activeGameTargets = mutableStateListOf<FallingGameTarget>()
     var score by mutableIntStateOf(0)
 
-    private val yPositions = mutableMapOf<Long, Float>()
-
-    //Game targets
-    //Føen
+    //Føen og Linea
     val gameTargets = listOf(
-        GameTarget("Bike", true, 2131165295),
-        GameTarget("Windmill", true, 2131165302),
-        GameTarget("Solar panel", true, 2131165300),
-        GameTarget("Cow", false, 2131165334),
-        GameTarget("Diesel", false, 2131165335),
-        GameTarget("Apple", true, 2131165333),
-        GameTarget("Plane", false, 2131165336)
+        GameTarget("Bike", true, R.drawable.game_bike),
+        GameTarget("Windmill", true, R.drawable.game_windmill),
+        GameTarget("Solar panel", true, R.drawable.game_solarpanel),
+        GameTarget("Cow", false, R.drawable.game_cow),
+        GameTarget("Diesel", false, R.drawable.game_diesel_car),
+        GameTarget("Apple", true, R.drawable.game_apple),
+        GameTarget("Plane", false, R.drawable.game_plane)
     )
 
+
+    //Linea og Føen
     //Bruges til at lave nye FallingGameTargets og bruges når vi tilføjer dem til ActivegameTargetListen
     fun createRandomTarget(): FallingGameTarget {
         val gameTarget = gameTargets.random()
@@ -58,97 +64,82 @@ class GameViewModel: ViewModel() {
             goodForClimate = gameTarget.goodForClimate,
             imageId = gameTarget.imageId,
             id = System.currentTimeMillis(),
-            xCordinate = Random.nextInt(0, screenWidth),
-            yCordinate = 0
+            xCordinate = Random.nextInt(0, screenWidth - targetSizePx.toInt()),
+            yCordinate = 0f
         )
-        yPositions[newTarget.id] = 0f
         return newTarget
     }
+
+    //Føen
     //Skal kaldes ved game start og skal derfor launches inde i gameScreen/mainScreen så spillet starter
-
     fun startGame(density: Float) {
-        //context: Context, // giver adgang til at oprette viewet
-        game.settings = game.settings.copy(targetSpeed = 60f)
-        game.status = GameStatus.Started //Først opdateres gameStatus
+        game.settings = game.settings.copy(targetSpeed = 1000f)
+        game = game.copy(status = GameStatus.Started) //Først opdateres gameStatus
         activeGameTargets.clear()
-        yPositions.clear()
+        score = 0
+        spawnJob?.cancel() // todo: chatten her
 
+        //Linea og Føen
         //Så kører spawning nemlig
-        viewModelScope.launch {
-            // Spawn a new target every 2 seconds
-            while (game.status == GameStatus.Started) {
-                activeGameTargets.add(createRandomTarget())
-                delay(5000L)
-            }
-        }
-
-        viewModelScope.launch {
-            while (game.status == GameStatus.Started) {
-                updateTargetPosition(density)
-                delay(16L)
+        spawnJob = viewModelScope.launch {
+            while (isActive && game.status == GameStatus.Started) {
+                if (activeGameTargets.size < 5) { // gør der ikke er så mange targets i frame
+                    activeGameTargets.add(createRandomTarget())
+                    println("Spawned new target")
+                }
+                delay(2000L)
             }
         }
     }
 
-    fun stopGame() {
-        println("game stopped")
-        game.status = GameStatus.Over
-        activeGameTargets.clear()
-        yPositions.clear()
+    //Føen
+        fun stopGame(
+            onGameOver: () -> Unit
+        ) {
+            game = game.copy(status = GameStatus.Over)
+            spawnJob?.cancel()
+            onGameOver()
+        }
 
-    }
 
-    //Chatgpth er bruget til koden neden under.
-    fun updateTargetPosition(density: Float) {
-        val speed = (game.settings.targetSpeed * 0.05f) //Denne justere hastigheden baseret på faktoren i Game.kt
-        val targetsToRemove = mutableListOf<FallingGameTarget>()
-        //val toResetTargets = mutableListOf<FallingGameTarget>() // En midlertidig liste til targets, der skal nulstilles
+        // todo: Chatgpth er bruget til koden neden under.
+        fun updateTargetPosition(
+            deltaMillis: Long,
+            onGameOver: () -> Unit
+        ) {
+            val speed = game.settings.targetSpeed
+            val targetsToRemove = mutableListOf<FallingGameTarget>()
 
-        activeGameTargets.forEach { target ->
-            val currentY = yPositions[target.id] ?: 0f //Henter den nuværende y-position
-            val newY = currentY + speed //Denne udregner den nyge y-position baseret på farten.
-            yPositions[target.id] = newY //Her bliver y-positionen opdateret i map
-            target.yCordinate = newY.toInt()
+            activeGameTargets.forEach { target ->
+                val deltaY = speed * (deltaMillis / 2000f)
+                target.yCordinate += deltaY
 
-            //hvis ikke element ikke fanges af jorden forsvinder det
-            if (newY > screenHeight) {
-                targetsToRemove.add(target)
-            }
 
-            //hvis et element fanges af jorden så:
-            if (checkCollision(target, density)) {
-                when (target.goodForClimate) {
-                    //du rammer en god ting og får point
-                    true -> {
-                        println("juhu du har valgt en god ting")
+                if (target.yCordinate > screenHeight) {
+                  targetsToRemove.add(target)
+                }
+
+                //  Linea og Føen
+                if (checkCollision(target)) {
+                    if (target.goodForClimate) {
                         score += 10
                         targetsToRemove.add(target)
-                    }
-
-                    //du rammer der ikke er god for klimaet  og game over
-                    false -> {
-                        println("you snooze you lose")
-                        stopGame()
-
-                        //sende de nye fangede point til firestore
-                        //vises game over skærm
-                        //
+                    } else {
+                        stopGame(onGameOver)
+                        targetsToRemove.add(target)
                     }
                 }
             }
-        }
-        // Fjern fangede eller forsvundne targets
-        targetsToRemove.forEach {
-            activeGameTargets.remove(it)
-
-
-            // yPositions.remove(it.id)
-        }
+            targetsToRemove.forEach {
+                activeGameTargets.remove(it)
+            }
     }
 
+
+    //Jonas
+    // todo: chatten brugt under
     private fun checkCollision(
-        target: FallingGameTarget,
-        density: Float
+        target: FallingGameTarget
     ): Boolean {
         val earthY = screenHeight - earthHeight //Klodens y-position
         val earthX = earthOffsetX.value
@@ -158,13 +149,17 @@ class GameViewModel: ViewModel() {
             size = Size(earthWidth.toFloat(), earthHeight.toFloat())
         )
 
-        val targetSizePx = 100 * density
+        val targetSizePx = targetSizePx
 
-        val targetRect = Rect (
-            offset = Offset(target.xCordinate.toFloat(), target.yCordinate.toFloat()),
-            size = Size(targetSizePx, targetSizePx)
-        )
-        println("Collision: ${earthRect.overlaps(targetRect)}")
-        return earthRect.overlaps(targetRect)
+        val targetRect = Rect(
+            offset = Offset(target.xCordinate.toFloat(), target.yCordinate),
+            size = Size(targetSizePx, targetSizePx)  )
+
+        val collision = earthRect.overlaps(targetRect)
+        return collision
     }
+
 }
+
+
+

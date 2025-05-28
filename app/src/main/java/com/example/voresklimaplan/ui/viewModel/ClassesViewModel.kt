@@ -14,13 +14,13 @@ class ClassesViewModel : ViewModel() {
     private val _classList = mutableStateListOf<Classroom>() // Her oprettes en StateList som holder styr på opdateringer i Classroom
     val classList: List<Classroom> get() = _classList // Listen kan kun læses udefra og kun Viewmodel kan ændre det.
 
-    init {
+    init { //Linea
         // Init gør at funktionen getAllClasses kører når man laver en instans af ViewModelen
         getAllClasses()
     }
 
     fun getAllClasses() {
-        viewModelScope.launch { // Her startes en coroutine, så netværkskoden ikke blokerer UI når der hentes data
+        viewModelScope.launch { // todo: chatten // Her startes en coroutine, så netværkskoden ikke blokerer UI når der hentes data
             try {
                 val result = firestoreRepository.getClassroomList() // Her gemmes resultat fra Firestore
                 _classList.clear() // Rydder listen så der ikke kommer dubletter

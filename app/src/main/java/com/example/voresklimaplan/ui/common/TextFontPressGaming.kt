@@ -1,6 +1,5 @@
-package com.example.voresklimaplan.common
+package com.example.voresklimaplan.ui.common
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,7 +11,7 @@ import androidx.compose.ui.unit.sp
 import com.example.voresklimaplan.R
 
 //Linea
-public val pressStartFont  = FontFamily(Font(R.font.pressstart))
+val pressStartFont  = FontFamily(Font(R.font.pressstart))
 
 @Composable
 fun TextFontGaming(

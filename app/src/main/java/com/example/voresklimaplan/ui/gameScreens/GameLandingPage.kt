@@ -1,4 +1,5 @@
-package com.example.voresklimaplan.ui.screens
+package com.example.voresklimaplan.ui.gameScreens
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -15,26 +16,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
 import com.example.voresklimaplan.R
-import com.example.voresklimaplan.common.PurpleButton
-import com.example.voresklimaplan.common.TextFontBubbles
-import com.example.voresklimaplan.common.TextFontGaming
+import com.example.voresklimaplan.ui.common.PurpleButton
+import com.example.voresklimaplan.ui.common.TextFontBubbles
 
 @Composable
-//start over screen - meget lig gameLandingPage
-//Linea
-fun GameOverScreen(
-    navController: NavController
-) {
+//start game screen
+//Føen
+fun GameLandingPage(navController: NavController) {
     val RubikBubbles = FontFamily(
         Font(R.font.rubikbubbles, weight = FontWeight.Normal)
     )
     val PressStartFont = FontFamily(
         Font(R.font.pressstart, weight = FontWeight.Normal)
     )
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -55,17 +50,27 @@ fun GameOverScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            TextFontBubbles(
+                textInput = "SAVE\nTHE EARTH",
+                fontSizeInput = 70
+            )
+
             Spacer(modifier = Modifier.height(20.dp))
+
             Text(
-                text = "GAME\n\nOVER",
-                fontSize = 50.sp,
+                text = "RAM ALLE DE TING SOM\n ER GODT FOR KLODEN",
+                fontSize = 11.sp,
                 textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF1F5229),
                 fontFamily = PressStartFont
             )
+
             Spacer(modifier = Modifier.height(40.dp))
 
             PurpleButton(
-                buttonTekst = "SPIL IGEN \uD83D\uDCCB",
+                buttonTekst = "\uD83C\uDFAE  SPIL  \uD83C\uDFAE",
                 fontFamily = PressStartFont,
                 fontSize = 18,
                 navController = navController,
@@ -78,13 +83,6 @@ fun GameOverScreen(
                 fontSize = 18,
                 navController = navController,
                 navigateTo = "ScoreboardScreen"
-            )
-
-            Image(
-                painter = painterResource(R.drawable.game_earth_angryy),
-                contentDescription = null,
-                modifier = Modifier,
-                contentScale = ContentScale.Crop
             )
 
         }
