@@ -1,4 +1,4 @@
-package com.example.voresklimaplan.common
+package com.example.voresklimaplan.ui.common
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
