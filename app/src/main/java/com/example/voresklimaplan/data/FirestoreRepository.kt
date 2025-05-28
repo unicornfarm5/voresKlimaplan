@@ -1,36 +1,46 @@
 package com.example.voresklimaplan.data
 
+import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.tasks.await
 
+//Jonas
 class FirestoreRepository {
-    fun updateScoreboard (classroom: Classroom) {
-        val classRoomCollection = Firebase.firestore.collection("Classroom") //Her defineres collection arbejdes med
+    private val classRoomCollection = Firebase.firestore.collection("Classroom")
+    //Her defineres hvilken collection der arbejdes med
 
-
+    suspend fun getClassroomList():List<Classroom> {
+        //Suspend betyder at denne funktion kan pauses og genoptages hvilket bruges i coroutines.
+        return classRoomCollection
+            .get()
+            .await()
+            .toObjects(Classroom::class.java) //Her konverteres de hentede dokumenter om til en instans af klassen Classroom
     }
-}
 
-
-/*
-//Her håndteres databasen (Slags mellemmand mellem database og app)
-
-class FamilyRepository {
-    fun addFamilyMember(familieMedlem: FamilieMedlem) {
+//Jonas
+    suspend fun updateScoreInFirebase(
+        classroomId: String,
+        newScore: Int
+    ) {
         try {
-            val familyCollection = Firebase.firestore.collection("familier") //Her defineres collection arbejdes med
+            val classRoomDocument = classRoomCollection //Hent dokumentet med ID classroomId fra Classroom i Firestore
+                .document(classroomId)
+                .get()
+                .await()
 
-            familyCollection //Her tilføjes data
-                .add(familieMedlem) //Tilføjer nyt dokument til collection (Indeholder ikke data endnu)
-                .addOnSuccessListener { documentReference ->
-                    println("Tilføjet med ID: ${documentReference.id}")
-                }
-                .addOnFailureListener { e ->
-                    println("Error: $e")
-                }
+            // todo ChatGPT brugt her
+            val currentScore = classRoomDocument.getLong("score")?.toInt() ?: 0 //Her hentes nuværende score fra firestore
+            val updatedScore = currentScore + newScore //Her lægges den nye score til firestore score
+
+            classRoomCollection
+                .document(classroomId)
+                .update("score", updatedScore)
+                .await()
+
         } catch (e: Exception) {
-            println("Error: $e")
+            Log.e("Firestore", "Fejl ved opdatering af score", e)
+            throw e
         }
     }
 }
- */
