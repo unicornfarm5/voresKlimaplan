@@ -1,6 +1,7 @@
 package com.example.voresklimaplan.ui.viewModel
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
@@ -25,12 +26,17 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.res.imageResource
 import com.example.voresklimaplan.R
+import com.example.voresklimaplan.data.Classroom
+import com.example.voresklimaplan.data.FirestoreRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
+import javax.security.auth.callback.Callback
 
 //Linea
 class GameViewModel: ViewModel() {
+    private val firestoreRepository = FirestoreRepository() // Her oprettes en instans af FirestoreRepository
     var game: Game by mutableStateOf(Game())
     var moveDirection: MoveDirection by mutableStateOf(MoveDirection.None)
     var screenWidth: Int by mutableIntStateOf(800)
@@ -41,7 +47,7 @@ class GameViewModel: ViewModel() {
     var layoutReady  by mutableStateOf(false)
     val imageCache: MutableMap<Int, ImageBitmap> = mutableMapOf()
     var hasCenteredEarth by mutableStateOf(false) //??
-    val targetSizePx = 200
+    var targetSizePx: Float = 0f
     private var spawnJob: Job? = null
 
     val activeGameTargets = mutableStateListOf<FallingGameTarget>() //den bruger de aktive
@@ -58,6 +64,8 @@ class GameViewModel: ViewModel() {
         GameTarget("Plane", false, R.drawable.game_plane)
     )
 
+
+
     //Bruges til at lave nye FallingGameTargets og bruges når vi tilføjer dem til ActivegameTargetListen
     fun createRandomTarget(): FallingGameTarget {
         val gameTarget = gameTargets.random()
@@ -66,7 +74,7 @@ class GameViewModel: ViewModel() {
             goodForClimate = gameTarget.goodForClimate,
             imageId = gameTarget.imageId,
             id = System.currentTimeMillis(),
-            xCordinate = Random.nextInt(0, screenWidth - targetSizePx),
+            xCordinate = Random.nextInt(0, screenWidth - targetSizePx.toInt()),
             yCordinate = 0f
         )
         return newTarget
@@ -85,24 +93,27 @@ class GameViewModel: ViewModel() {
         //Så kører spawning nemlig
         spawnJob=viewModelScope.launch {
             while (isActive && game.status == GameStatus.Started) {
-                if (activeGameTargets.size < 6) { // gør der ikke er så mange targets i frame
+                if (activeGameTargets.size < 5) { // gør der ikke er så mange targets i frame
                     activeGameTargets.add(createRandomTarget())
                     println("Spawned new target")
                 }
-                delay(200L)
+                delay(2000L)
             }
 
         }
     }
 
-    fun stopGame() {
+        fun stopGame(
+            onGameOver: () -> Unit
+        ) {
             game = game.copy(status = GameStatus.Over)
             spawnJob?.cancel()
-    }
+            onGameOver()
+        }
 
 
-    //Chatgp er bruget til koden neden under.
-    fun updateTargetPosition(density: Float, deltaMillis: Long) {
+        //Chatgpth er bruget til koden neden under.
+        fun updateTargetPosition(density: Float, deltaMillis: Long, onGameOver: () -> Unit) {
             println("updateTargetPosition: deltaMillis = $deltaMillis, speed = ${game.settings.targetSpeed}")
             val speed = game.settings.targetSpeed
             val targetsToRemove = mutableListOf<FallingGameTarget>()
@@ -122,7 +133,7 @@ class GameViewModel: ViewModel() {
                         score += 10
                         targetsToRemove.add(target)
                     } else {
-                        game = game.copy(status = GameStatus.Over)
+                        stopGame(onGameOver)
                         targetsToRemove.add(target)
                     }
                 }
@@ -145,16 +156,15 @@ class GameViewModel: ViewModel() {
             size = Size(earthWidth.toFloat(), earthHeight.toFloat())
         )
 
-        val targetSizePx: Int = (200 * density).toInt()
+        val targetSizePx = targetSizePx
 
         val targetRect = Rect(
-            offset = Offset(target.xCordinate.toFloat(), target.yCordinate),
+            offset = Offset(target.xCordinate.toFloat(), target.yCordinate.toFloat()),
             size = Size(targetSizePx.toFloat(), targetSizePx.toFloat())  )
 
         val collision = earthRect.overlaps(targetRect)
         return collision
     }
-
 
 }
 

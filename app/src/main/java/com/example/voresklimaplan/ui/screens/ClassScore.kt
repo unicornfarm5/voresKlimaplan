@@ -94,7 +94,7 @@ fun Scoreboard (scoreboardClasses: List<String>, scoreboardScores: List<Int>) {
             )
             {
                 scoreboardClasses.zip(scoreboardScores).forEach { (scoreboardClass, scoreBoardScore) ->
-                    TextFontGaming(textInput = "$scoreboardClass $scoreBoardScore", fontSizeInput = 11)
+                    TextFontGaming(textInput = "$scoreboardClass $scoreBoardScore", fontSizeInput = 12)
             }
         }
         }

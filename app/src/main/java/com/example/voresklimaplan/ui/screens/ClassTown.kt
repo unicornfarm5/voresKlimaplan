@@ -83,8 +83,7 @@ fun ClassTown(
     navController: NavHostController,
     viewModel: ClassesViewModel
 ) {
-    val classList = viewModel.classList //Henter listen fra ViewModel...
-
+    val classList = viewModel.classList
     Box(
         modifier = Modifier
             .fillMaxSize(),
@@ -106,6 +105,7 @@ fun ClassTown(
                 verticalArrangement = Arrangement.Top
         ) {
             Spacer(modifier = Modifier.height(16.dp))
+
             //vi henter fra den første klasse i listen
             TextFontGaming(classList[0].className, 20, align = TextAlign.Center)
             TextFontGaming(classList[0].score.toString(), 17, align = TextAlign.Center)

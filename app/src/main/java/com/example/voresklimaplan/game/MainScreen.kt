@@ -54,7 +54,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
     val tick = remember { mutableStateOf(0L) }
     val TARGET_SIZE_DP = 80.dp // så man bruger samme str
     val TARGET_SIZE_PX = with(LocalDensity.current) { TARGET_SIZE_DP.toPx() }
-
+    gameViewModel.targetSizePx = TARGET_SIZE_PX
     val scope = rememberCoroutineScope()
 
     // Hent billedet som ImageBitmap til Canvas
@@ -62,8 +62,9 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
     val earthWidth = earthImage.width
     val earthHeight = earthImage.height
 
-    // Chatten har lavet denne kode
-    //laver target billeder om til imagebitmap som er mindre krævende at rendere
+// Chatten har lavet denne kode
+//laver target billeder om til imagebitmap som er mindre krævende at rendere
+// Viewmodel
     gameViewModel.gameTargets.forEach { target ->
         if (!gameViewModel.imageCache.containsKey(target.imageId)) {
             val bm: ImageBitmap? = runCatching {
@@ -80,7 +81,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
         }
     }
 
-    //Sender værdier over til viewModel
+//Sender værdier over til viewModel
     gameViewModel.earthWidth = earthWidth
     gameViewModel.earthHeight = earthHeight
 
@@ -89,29 +90,20 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
         gameViewModel.startGame(density)
     }
 
-//Jonas
+//Jonas ryk til viewmodel
     DisposableEffect(Unit) { //Hvis spillet lukkes stoppes spillet
         onDispose {
-            gameViewModel.stopGame()
+            gameViewModel.stopGame({})
          }
     }
 
     BackHandler { //Sørger for at spillet lukkes korrekt hvis der trykkes tilbage
-        gameViewModel.stopGame()
+        gameViewModel.stopGame({})
         navController.popBackStack()
     }
 
 
-// Check if game is over
-    LaunchedEffect(gameViewModel.game.status) {
-        if (gameViewModel.game.status == GameStatus.Over) {
-            println("Navigating to GameOverScreen")
-            viewModel.saveScoreInFireBase("BJYAEk0hrL0s0WipYngc", gameViewModel.score)
-            navController.navigate("GameOverScreen")
-        }
-    }
-
-    // Spillet venter til layout før den starter
+    // Spillet venter til layout før den starter - ryk til viewmodel
     LaunchedEffect(gameViewModel.layoutReady) {
         println("layoutReady = $gameViewModel.layoutReady, game status = ${gameViewModel.game.status}")
         if (gameViewModel.layoutReady && gameViewModel.game.status != GameStatus.Started) {
@@ -121,7 +113,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
     }
 
 //føen
-    DisposableEffect(Unit) {
+    DisposableEffect(Unit) { //  ryk til game
         val job = scope.launch {
             var lastFrameTime = System.nanoTime()
             while (gameViewModel.game.status != GameStatus.Over && isActive) {
@@ -131,7 +123,11 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
 
                 // odaterer kun targets, hvis spillet stadig er aktivt
                 if (gameViewModel.game.status == GameStatus.Started) {
-                    gameViewModel.updateTargetPosition(density, deltaTimeMillis)
+                    gameViewModel.updateTargetPosition(density, deltaTimeMillis, onGameOver = {
+                        println("Navigating to GameOverScreen")
+                        viewModel.saveScoreInFireBase("BJYAEk0hrL0s0WipYngc", gameViewModel.score)
+                        navController.navigate("GameOverScreen")
+                    })
                 }
                 // gør at der hele tiden er en ændring --> gør det muligt for spillet at køre smooth
                 tick.value = now
@@ -152,8 +148,8 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                     gameViewModel.screenWidth = it.size.width
                     gameViewModel.screenHeight = it.size.height
 
-                    // Startposition: midt i bunden
-                    if (!gameViewModel.hasCenteredEarth) {
+                    // Startposition: midt i bunden snapto og scope er del af UI
+                    if (!gameViewModel.hasCenteredEarth) { //ryk til viewmodel
                         scope.launch {
                             gameViewModel.earthOffsetX.snapTo(gameViewModel.screenWidth / 2f - earthWidth / 2f)
                             gameViewModel.hasCenteredEarth = true
@@ -161,7 +157,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                     }
                     gameViewModel.layoutReady = true
                 }
-                .pointerInput(Unit) {
+                .pointerInput(Unit) { // ui relateret
                     awaitPointerEventScope {
                         detectMoveGesture(
                             gameStatus = gameViewModel.game.status,
@@ -203,9 +199,8 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                 .fillMaxSize()
                 .then(Modifier.drawBehind { tick.value }))
             {
-                // Targets
+                // Targets ryk til viewmodel
                 gameViewModel.activeGameTargets.forEach { target ->
-
                     // cachet billeder med ImageBitmap
                     val bitmap = gameViewModel.imageCache[target.imageId]
                     if (bitmap != null) {
