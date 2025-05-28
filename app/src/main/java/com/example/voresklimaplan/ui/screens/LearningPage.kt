@@ -61,7 +61,8 @@ fun BackgroundScreen(navController: NavController) {
                 fontSize = 25,
                 navController = navController,
                 onClick = {
-                    //ide fra chatGPT
+                    //Linea
+                    // todo: ide fra chatGPT
                     Intent(Intent.ACTION_VIEW, Uri.parse("https://skole.voresklimaplan.dk/")).apply {
                         context.startActivity(this)
                     }
@@ -88,12 +89,14 @@ fun Title() {
     ) {
         TextFontDynaPuff(
             textInput = "Vores KlimaPlan",
-            fontSizeInput = 28
+            fontSizeInput = 28,
+            modifier = Modifier
         )
         Spacer(modifier = Modifier.height(8.dp))
         TextFontDynaPuff(
             textInput = "Gør en forskel",
-            fontSizeInput = 16
+            fontSizeInput = 16,
+            modifier = Modifier
         )
     }
 }
@@ -119,7 +122,8 @@ fun GameThumbnail(navController: NavController, modifier: Modifier = Modifier) {
     ) {
         TextFontDynaPuff(
             textInput = "Spil",
-            fontSizeInput = 20
+            fontSizeInput = 20,
+            modifier = Modifier
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -136,7 +140,7 @@ fun GameThumbnail(navController: NavController, modifier: Modifier = Modifier) {
             }
     ) {
         Image(
-            painter = painterResource(id = R.drawable.learningpagegameintro), //Chatgpt her
+            painter = painterResource(id = R.drawable.learningpagegameintro),
             contentDescription = "Game Intro Thumbnail",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
@@ -190,7 +194,8 @@ fun ClimaSteps(modifier: Modifier = Modifier) {
     ) {
         TextFontDynaPuff(
             textInput = "KLIMAVENLIGE STEPS DER GØR EN FORSKEL",
-            fontSizeInput = 20
+            fontSizeInput = 20,
+            modifier = Modifier
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -208,7 +213,7 @@ fun ClimaSteps(modifier: Modifier = Modifier) {
 fun StyledStepButton(
 stepData: StepButtonData
 ) {
-    var expanded by remember { mutableStateOf(false) } //Chatgpt her
+    var expanded by remember { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -217,7 +222,7 @@ stepData: StepButtonData
             .clip(RoundedCornerShape(12.dp))
             .border(2.dp, stepData.borderColor, RoundedCornerShape(12.dp))
             .padding(12.dp)
-            .clickable { expanded = !expanded } //Chatgpt her
+            .clickable { expanded = !expanded } // todo: Chatgpt her
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -242,17 +247,9 @@ stepData: StepButtonData
             TextFontDynaPuff(
                 textInput = stepData.description,
                 fontSizeInput = 14,
-                color = stepData.textColor
+                color = stepData.textColor,
+                modifier = Modifier
             )
         }
     }
-}
-
-
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun PreviewBackgroundScreen() { //Føen her.
-    val navController = rememberNavController()
-    BackgroundScreen(navController = navController)
 }

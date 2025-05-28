@@ -23,13 +23,16 @@ import androidx.navigation.NavHostController
 import com.example.voresklimaplan.R
 import com.example.voresklimaplan.ui.common.TextFontGaming
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
+import com.example.voresklimaplan.ui.viewModel.GameViewModel
 import kotlin.random.Random
 
+//Linea
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun SpawnTownLevelImages(
-    classesViewModel: ClassesViewModel
+    classesViewModel: ClassesViewModel,
+    gameViewModel: GameViewModel
 ) {
     val townScore: Int = classesViewModel.classList[0].score
     val level = townScore / 100
@@ -41,15 +44,12 @@ fun SpawnTownLevelImages(
             contentAlignment = Alignment.Center
         )
         {
-            val screenWidth = 800 //burde være blevet hentet fra gameviewmodel
-            val screenHeight = 1600 //--//--
-
             repeat(level) {
             //den nederst halvdel af skærmen er græs, så alle tingene skal placeres random nederste halvdel
-            val randomX = Random.nextInt(0, screenWidth)
-            val randomY = Random.nextInt(screenHeight / 2, screenHeight)
-            val randomX2 = Random.nextInt(0, screenWidth)
-            val randomY2 = Random.nextInt(screenHeight / 2, screenHeight)
+            val randomX = Random.nextInt(0, gameViewModel.screenWidth)
+            val randomY = Random.nextInt(0, gameViewModel.screenHeight / 2)
+            val randomX2 = Random.nextInt(0, gameViewModel.screenWidth)
+            val randomY2 = Random.nextInt(0, gameViewModel.screenHeight / 2)
 
             Image(
                 painter = painterResource(R.drawable.game_windmill),
@@ -81,7 +81,8 @@ fun SpawnTownLevelImages(
 @Composable
 fun ClassTown(
     navController: NavHostController,
-    viewModel: ClassesViewModel
+    viewModel: ClassesViewModel,
+    gameViewModel: GameViewModel
 ) {
     val classList = viewModel.classList
     Box(
@@ -96,7 +97,8 @@ fun ClassTown(
             contentDescription = null,
             modifier = Modifier.fillMaxSize()
         )
-        SpawnTownLevelImages(viewModel)
+
+        SpawnTownLevelImages(viewModel, gameViewModel)
     }
         Column(
                 modifier = Modifier

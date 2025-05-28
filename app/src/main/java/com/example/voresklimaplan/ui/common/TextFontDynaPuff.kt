@@ -18,14 +18,14 @@ val dynaPuffFont = FontFamily(Font(R.font.dynapuff))
 fun TextFontDynaPuff(
     textInput: String,
     fontSizeInput: Int,
-    color: Color = Color("#191749".toColorInt()),  // Default color, can be overridden
-    modifier: Modifier = Modifier                  // Add this line
+    color: Color = Color("#191749".toColorInt()),
+    modifier: Modifier
 ) {
     Text(
         text = textInput,
         fontSize = fontSizeInput.sp,
         color = color,
         fontFamily = dynaPuffFont,
-        modifier = modifier                         // Use the parameter here
+        modifier = modifier
     )
 }

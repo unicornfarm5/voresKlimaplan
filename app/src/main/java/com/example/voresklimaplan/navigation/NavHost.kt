@@ -16,8 +16,8 @@ import com.example.voresklimaplan.ui.screens.ScoreboardScreen
 import com.example.voresklimaplan.ui.viewModel.ClassesViewModel
 import com.example.voresklimaplan.ui.viewModel.GameViewModel
 
-@SuppressLint("ViewModelConstructorInComposable")
-@RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+//Føen, Jonas, Linea og Nikoleta
+
 @Composable
 fun Navhost(navController: NavHostController, classesViewModel: ClassesViewModel,gameViewModel: GameViewModel) {
 
@@ -38,25 +38,24 @@ fun Navhost(navController: NavHostController, classesViewModel: ClassesViewModel
             )
         }
 
-        composable("ScoreboardScreen") { //???
+        composable("ScoreboardScreen") {
             ScoreboardScreen(
+                navController = navController,
+                viewModel = classesViewModel,
+            )
+        }
+
+        composable("ClassTown") {
+            ClassTown(
                 navController = navController,
                 viewModel = classesViewModel,
                 gameViewModel = gameViewModel
             )
         }
 
-        composable("ClassTown") { //???
-            ClassTown(
-                navController = navController,
-                viewModel = classesViewModel
-            )
-        }
-
-        composable("GameOverScreen") { //???
+        composable("GameOverScreen") {
             GameOverScreen(
-                navController = navController,
-                gameViewModel = gameViewModel
+                navController = navController
             )
         }
     }

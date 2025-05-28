@@ -1,15 +1,11 @@
 package com.example.voresklimaplan.ui.viewModel
 
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -24,36 +20,31 @@ import com.example.voresklimaplan.game.domain.gameTargets.GameTarget
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
-import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.res.imageResource
 import com.example.voresklimaplan.R
-import com.example.voresklimaplan.data.Classroom
 import com.example.voresklimaplan.data.FirestoreRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.isActive
-import javax.security.auth.callback.Callback
 
 //Linea
 class GameViewModel: ViewModel() {
-    private val firestoreRepository = FirestoreRepository() // Her oprettes en instans af FirestoreRepository
     var game: Game by mutableStateOf(Game())
     var moveDirection: MoveDirection by mutableStateOf(MoveDirection.None)
     var screenWidth: Int by mutableIntStateOf(800)
-    var screenHeight:  Int by mutableIntStateOf(1800) //why this state og hardcodet på samme tid
+    var screenHeight:  Int by mutableIntStateOf(1800)
     val earthOffsetX: Animatable<Float, AnimationVector1D> by mutableStateOf(Animatable(0f))
     var earthHeight by mutableIntStateOf(0)
     var earthWidth by mutableIntStateOf(0)
     var layoutReady  by mutableStateOf(false)
     val imageCache: MutableMap<Int, ImageBitmap> = mutableMapOf()
-    var hasCenteredEarth by mutableStateOf(false) //??
+    var hasCenteredEarth by mutableStateOf(false)
     var targetSizePx: Float = 0f
     private var spawnJob: Job? = null
 
-    val activeGameTargets = mutableStateListOf<FallingGameTarget>() //den bruger de aktive
+    val activeGameTargets = mutableStateListOf<FallingGameTarget>()
     var score by mutableIntStateOf(0)
 
-    //Føen
+    //Føen og Linea
     val gameTargets = listOf(
         GameTarget("Bike", true, R.drawable.game_bike),
         GameTarget("Windmill", true, R.drawable.game_windmill),
@@ -65,7 +56,7 @@ class GameViewModel: ViewModel() {
     )
 
 
-
+    //Linea og Føen
     //Bruges til at lave nye FallingGameTargets og bruges når vi tilføjer dem til ActivegameTargetListen
     fun createRandomTarget(): FallingGameTarget {
         val gameTarget = gameTargets.random()
@@ -78,20 +69,20 @@ class GameViewModel: ViewModel() {
             yCordinate = 0f
         )
         return newTarget
-
     }
 
+    //Føen
     //Skal kaldes ved game start og skal derfor launches inde i gameScreen/mainScreen så spillet starter
-    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     fun startGame(density: Float) {
         game.settings = game.settings.copy(targetSpeed = 1000f)
         game = game.copy(status = GameStatus.Started) //Først opdateres gameStatus
         activeGameTargets.clear()
         score = 0
-        spawnJob?.cancel()
+        spawnJob?.cancel() // todo: chatten her
 
+        //Linea og Føen
         //Så kører spawning nemlig
-        spawnJob=viewModelScope.launch {
+        spawnJob = viewModelScope.launch {
             while (isActive && game.status == GameStatus.Started) {
                 if (activeGameTargets.size < 5) { // gør der ikke er så mange targets i frame
                     activeGameTargets.add(createRandomTarget())
@@ -99,10 +90,10 @@ class GameViewModel: ViewModel() {
                 }
                 delay(2000L)
             }
-
         }
     }
 
+    //Føen
         fun stopGame(
             onGameOver: () -> Unit
         ) {
@@ -112,9 +103,11 @@ class GameViewModel: ViewModel() {
         }
 
 
-        //Chatgpth er bruget til koden neden under.
-        fun updateTargetPosition(density: Float, deltaMillis: Long, onGameOver: () -> Unit) {
-            println("updateTargetPosition: deltaMillis = $deltaMillis, speed = ${game.settings.targetSpeed}")
+        // todo: Chatgpth er bruget til koden neden under.
+        fun updateTargetPosition(
+            deltaMillis: Long,
+            onGameOver: () -> Unit
+        ) {
             val speed = game.settings.targetSpeed
             val targetsToRemove = mutableListOf<FallingGameTarget>()
 
@@ -127,8 +120,8 @@ class GameViewModel: ViewModel() {
                   targetsToRemove.add(target)
                 }
 
-                //  Check collision
-                if (checkCollision(target, density)) {
+                //  Linea og Føen
+                if (checkCollision(target)) {
                     if (target.goodForClimate) {
                         score += 10
                         targetsToRemove.add(target)
@@ -144,9 +137,10 @@ class GameViewModel: ViewModel() {
     }
 
 
+    //Jonas
+    // todo: chatten brugt under
     private fun checkCollision(
-        target: FallingGameTarget,
-        density: Float
+        target: FallingGameTarget
     ): Boolean {
         val earthY = screenHeight - earthHeight //Klodens y-position
         val earthX = earthOffsetX.value
@@ -159,8 +153,8 @@ class GameViewModel: ViewModel() {
         val targetSizePx = targetSizePx
 
         val targetRect = Rect(
-            offset = Offset(target.xCordinate.toFloat(), target.yCordinate.toFloat()),
-            size = Size(targetSizePx.toFloat(), targetSizePx.toFloat())  )
+            offset = Offset(target.xCordinate.toFloat(), target.yCordinate),
+            size = Size(targetSizePx, targetSizePx)  )
 
         val collision = earthRect.overlaps(targetRect)
         return collision

@@ -29,9 +29,8 @@ class FirestoreRepository {
                 .get()
                 .await()
 
+            // todo ChatGPT brugt her
             val currentScore = classRoomDocument.getLong("score")?.toInt() ?: 0 //Her hentes nuværende score fra firestore
-            //?.toInt(): Hvis getLong(...) ikke er null, så lav det om til en Int
-            //Hvis alt før ?: er null, så brug 0 i stedet
             val updatedScore = currentScore + newScore //Her lægges den nye score til firestore score
 
             classRoomCollection

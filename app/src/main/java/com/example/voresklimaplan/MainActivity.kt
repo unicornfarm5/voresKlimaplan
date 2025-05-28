@@ -18,29 +18,16 @@ import com.example.voresklimaplan.ui.viewModel.GameViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             VoresKlimaplanTheme {
-                val classesViewModel: ClassesViewModel = viewModel() //problems hvis man fx drejer tlf og vender skærm //pointe rapport vi ændr den her
+                val classesViewModel: ClassesViewModel = viewModel()
                 val gameViewModel: GameViewModel = viewModel()
-                val navController = rememberNavController() //??
-                Navhost(navController = navController, classesViewModel = classesViewModel, gameViewModel = gameViewModel) //??
+                val navController = rememberNavController()
+                Navhost(navController = navController, classesViewModel = classesViewModel, gameViewModel = gameViewModel)
             }
         }
     }
 }
-
-/*
-@Composable
-fun Scoreboard(classesViewModel: ClassesViewModel) {
-    classesViewModel.getAllClasses()
-}
-
-suspend fun getClasses() {
-    val getClassroom = FirestoreRepository()
-    println(getClassroom.getClassroom())
-}
- */

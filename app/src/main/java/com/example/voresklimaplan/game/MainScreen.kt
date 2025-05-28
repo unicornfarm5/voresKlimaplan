@@ -1,9 +1,7 @@
 package com.example.voresklimaplan.game
 
-import android.os.Build
 import android.util.Log
 import androidx.activity.compose.BackHandler
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -46,8 +44,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
 //Føen og Jonas
-//@RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
-@RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+
 @Composable
 fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameViewModel: GameViewModel) {
     val density = LocalDensity.current.density
@@ -62,9 +59,8 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
     val earthWidth = earthImage.width
     val earthHeight = earthImage.height
 
-// Chatten har lavet denne kode
+// todo: Chatten har lavet denne kode
 //laver target billeder om til imagebitmap som er mindre krævende at rendere
-// Viewmodel
     gameViewModel.gameTargets.forEach { target ->
         if (!gameViewModel.imageCache.containsKey(target.imageId)) {
             val bm: ImageBitmap? = runCatching {
@@ -90,7 +86,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
         gameViewModel.startGame(density)
     }
 
-//Jonas ryk til viewmodel
+//Jonas
     DisposableEffect(Unit) { //Hvis spillet lukkes stoppes spillet
         onDispose {
             gameViewModel.stopGame({})
@@ -102,7 +98,8 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
         navController.popBackStack()
     }
 
-
+    //Føen
+    // todo: chatten brugt her
     // Spillet venter til layout før den starter - ryk til viewmodel
     LaunchedEffect(gameViewModel.layoutReady) {
         println("layoutReady = $gameViewModel.layoutReady, game status = ${gameViewModel.game.status}")
@@ -112,7 +109,8 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
         }
     }
 
-//føen
+//Føen
+    // todo: Chatten brugt her
     DisposableEffect(Unit) { //  ryk til game
         val job = scope.launch {
             var lastFrameTime = System.nanoTime()
@@ -123,7 +121,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
 
                 // odaterer kun targets, hvis spillet stadig er aktivt
                 if (gameViewModel.game.status == GameStatus.Started) {
-                    gameViewModel.updateTargetPosition(density, deltaTimeMillis, onGameOver = {
+                    gameViewModel.updateTargetPosition(deltaTimeMillis, onGameOver = {
                         println("Navigating to GameOverScreen")
                         viewModel.saveScoreInFireBase("BJYAEk0hrL0s0WipYngc", gameViewModel.score)
                         navController.navigate("GameOverScreen")
@@ -140,6 +138,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
     }
 
     //Jonas
+    // todo: chatten brugt under
     Column {
         Box(
             modifier = Modifier
@@ -148,8 +147,8 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                     gameViewModel.screenWidth = it.size.width
                     gameViewModel.screenHeight = it.size.height
 
-                    // Startposition: midt i bunden snapto og scope er del af UI
-                    if (!gameViewModel.hasCenteredEarth) { //ryk til viewmodel
+                    // Startposition: midt i bunden. Snapto og scope er del af UI
+                    if (!gameViewModel.hasCenteredEarth) {
                         scope.launch {
                             gameViewModel.earthOffsetX.snapTo(gameViewModel.screenWidth / 2f - earthWidth / 2f)
                             gameViewModel.hasCenteredEarth = true
@@ -177,6 +176,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                 }
         ) {
 
+            //Linea
             // Baggrund
             Image(
                 painter = painterResource(R.drawable.background_game),
@@ -194,12 +194,14 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                     .padding(top = 16.dp)
             )
 
+
             // Jordkloden tegnes
+            //Føen
+            // todo: chatten brugt under
             Canvas(modifier = Modifier
                 .fillMaxSize()
                 .then(Modifier.drawBehind { tick.value }))
             {
-                // Targets ryk til viewmodel
                 gameViewModel.activeGameTargets.forEach { target ->
                     // cachet billeder med ImageBitmap
                     val bitmap = gameViewModel.imageCache[target.imageId]
@@ -215,6 +217,7 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
                     }
                 }
 
+                //Jonas
                 // jordklode
                 drawImage(
                     image = earthImage,
@@ -226,29 +229,8 @@ fun MainScreen(navController: NavController, viewModel: ClassesViewModel, gameVi
             }
             Box(modifier = Modifier
                 .fillMaxSize()
-                .then(Modifier.drawBehind { tick.value }) // Trig rendering
+                .then(Modifier.drawBehind { tick.value }) // Føen
             )
-        }}}
-
-
-
-//Linea
-
-            //Falling GameTargets
-                /*
-            gameViewModel.activeGameTargets.forEach { fallingGameTarget ->
-                val xDp = with(LocalDensity.current) { fallingGameTarget.xCordinate.toDp() }
-                val yDp = with(LocalDensity.current) { fallingGameTarget.yCordinate.toDp() }
-
-                Image(
-                    painter = painterResource(id = fallingGameTarget.imageId),
-                    contentDescription = fallingGameTarget.targetName,
-                    modifier = Modifier
-                        .size(150.dp)
-                            .offset(x = xDp, y = yDp)
-                )
-            }
         }
     }
 }
-//fra https://www.youtube.com/watch?v=LXZw2RyV06s&t=849s */

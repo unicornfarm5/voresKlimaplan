@@ -90,14 +90,3 @@ fun GameLandingPage(navController: NavController) {
         }
     }
 }
-
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun GameLandingPagePreview() {
-    // Brug en fake NavController til preview
-    val navController = rememberNavController()
-    GameLandingPage(navController = navController)
-}

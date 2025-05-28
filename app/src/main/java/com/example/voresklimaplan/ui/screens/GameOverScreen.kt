@@ -21,10 +21,7 @@ import com.example.voresklimaplan.ui.viewModel.GameViewModel
 @Composable
 //start over screen - meget lig gameLandingPage
 //Linea
-fun GameOverScreen(
-    navController: NavController,
-    gameViewModel: GameViewModel
-) {
+fun GameOverScreen(navController: NavController) {
     val RubikBubbles = FontFamily(
         Font(R.font.rubikbubbles, weight = FontWeight.Normal)
     )

@@ -3,13 +3,16 @@ package com.example.voresklimaplan.game.util
 import androidx.compose.ui.input.pointer.AwaitPointerEventScope
 import com.example.voresklimaplan.game.domain.GameStatus
 
+/*Inspireret fra Youtube:
+https://www.youtube.com/watch?v=LXZw2RyV06s&t=849s
+ */
+
+
 //Føen: funktionen detectMoveGesture(...) er en costum gesture detector som kan bruges i spil,
 // hvor man skal trække fingeren mod venstre eller højre
 
 suspend fun AwaitPointerEventScope.detectMoveGesture( //suspend bruges i pointerInput-blokke fordi vi venter på touch-events. AwaitPointerEventScope giver adgang til fingerinput(tryk, bevægelser osv.)
     gameStatus: GameStatus, //Gamestatus checker om spillet kører
-    //onLeft:() -> Unit,
-    //onRight:()-> Unit, // funktioner som vi selv sender ind, som bliver kaldt når noget sker
     onMove: (deltaX: Float) -> Unit,
     onFingerLifted:() -> Unit,
     ){
@@ -40,13 +43,7 @@ suspend fun AwaitPointerEventScope.detectMoveGesture( //suspend bruges i pointer
             onMove(deltaX)
             previousPosition = currentPosition
             change.consume()
-            /*if (deltaX < 0 ){ // hvis negativt bevæg til venstre
-                onLeft()
-            } else if(deltaX > 0 ){ // hvis positiv bevæg til højre
-                onRight()
-            }
 
-             */
             // gem den nye position og brug eventet
             previousPosition = currentPosition
             change.consume() // consume gør at der ikke er andre som reagere på samme event

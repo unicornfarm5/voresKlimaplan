@@ -13,7 +13,7 @@ import androidx.core.graphics.toColorInt
 import com.example.voresklimaplan.R
 
 //Linea
-public val rubrikBubblesFont = FontFamily(Font(R.font.rubikbubbles))
+val rubrikBubblesFont = FontFamily(Font(R.font.rubikbubbles))
 
 @Composable
 fun TextFontBubbles(textInput: String, fontSizeInput: Int) {

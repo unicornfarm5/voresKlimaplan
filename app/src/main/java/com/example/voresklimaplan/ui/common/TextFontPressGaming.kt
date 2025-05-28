@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.sp
 import com.example.voresklimaplan.R
 
 //Linea
-public val pressStartFont  = FontFamily(Font(R.font.pressstart))
+val pressStartFont  = FontFamily(Font(R.font.pressstart))
 
 @Composable
 fun TextFontGaming(
