@@ -92,16 +92,17 @@ class GameViewModel: ViewModel() {
                 delay(200L)
             }
 
-        }}
-
-        fun stopGame() {
-            game = game.copy(status = GameStatus.Over)
-                spawnJob?.cancel()
         }
+    }
+
+    fun stopGame() {
+            game = game.copy(status = GameStatus.Over)
+            spawnJob?.cancel()
+    }
 
 
-        //Chatgpth er bruget til koden neden under.
-        fun updateTargetPosition(density: Float, deltaMillis: Long) {
+    //Chatgp er bruget til koden neden under.
+    fun updateTargetPosition(density: Float, deltaMillis: Long) {
             println("updateTargetPosition: deltaMillis = $deltaMillis, speed = ${game.settings.targetSpeed}")
             val speed = game.settings.targetSpeed
             val targetsToRemove = mutableListOf<FallingGameTarget>()
@@ -129,7 +130,7 @@ class GameViewModel: ViewModel() {
             targetsToRemove.forEach {
                 activeGameTargets.remove(it)
             }
-        }
+    }
 
 
     private fun checkCollision(
@@ -147,7 +148,7 @@ class GameViewModel: ViewModel() {
         val targetSizePx: Int = (200 * density).toInt()
 
         val targetRect = Rect(
-            offset = Offset(target.xCordinate.toFloat(), target.yCordinate.toFloat()),
+            offset = Offset(target.xCordinate.toFloat(), target.yCordinate),
             size = Size(targetSizePx.toFloat(), targetSizePx.toFloat())  )
 
         val collision = earthRect.overlaps(targetRect)

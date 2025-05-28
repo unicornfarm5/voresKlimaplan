@@ -1,4 +1,4 @@
-package com.example.voresklimaplan.common
+package com.example.voresklimaplan.ui.common
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.padding

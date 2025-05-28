@@ -19,8 +19,8 @@ import androidx.navigation.NavController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.voresklimaplan.R
-import com.example.voresklimaplan.common.PurpleButton
-import com.example.voresklimaplan.common.TextFontBubbles
+import com.example.voresklimaplan.ui.common.PurpleButton
+import com.example.voresklimaplan.ui.common.TextFontBubbles
 
 @Composable
 //start game screen

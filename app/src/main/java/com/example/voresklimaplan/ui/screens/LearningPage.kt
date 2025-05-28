@@ -24,11 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.voresklimaplan.R
-import com.example.voresklimaplan.common.CustomDivider
-import com.example.voresklimaplan.common.PurpleButton
-import com.example.voresklimaplan.common.TextFontDynaPuff
-import com.example.voresklimaplan.common.dynaPuffFont
-import com.example.voresklimaplan.common.StepButtonData
+import com.example.voresklimaplan.ui.common.CustomDivider
+import com.example.voresklimaplan.ui.common.PurpleButton
+import com.example.voresklimaplan.ui.common.TextFontDynaPuff
+import com.example.voresklimaplan.ui.common.dynaPuffFont
+import com.example.voresklimaplan.ui.common.StepButtonData
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
