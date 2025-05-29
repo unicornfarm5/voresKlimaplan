@@ -20,3 +20,5 @@ minSDK = 35
 ## Firestore
 * Please note, that this project have been set up with FireStore. That means for anyone wishing to download the code, some functions will not be able to work, such as updating the scoreboard.
 * As an example should the future user set up their own Firestore for it, use their own: google service json firebase and so on, as this projects firebase have an experation date.
+
+### Vi har fået hjælp af chatten til at skrive denne
