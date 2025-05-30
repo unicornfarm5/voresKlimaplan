@@ -13,6 +13,9 @@ import java.util.UUID
 @RunWith(AndroidJUnit4::class)
 class ClassesViewModelTest {
 
+    // todo: Til dette har vi fået hjælp af ChatGPT
+
+
     // Linea og Nikoleta
     @Test
     fun fetchAllClassrooms_successfully() = runBlocking {

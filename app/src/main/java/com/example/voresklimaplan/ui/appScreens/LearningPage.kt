@@ -205,6 +205,7 @@ fun ClimaSteps(modifier: Modifier = Modifier) {
     }
 }
 
+// todo: der er brugt chatgpt til hjælp af størrelser af billeder, padding og lign.
 
 //Nikoleta har været her
 @Composable
